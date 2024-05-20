@@ -1,6 +1,12 @@
-package userbridge.domain.user;
+package userbridge.infrastructure.facade;
 
 import org.springframework.stereotype.Component;
+import userbridge.domain.user.DTO.LoginDto;
+import userbridge.domain.user.DTO.UserDto;
+import userbridge.domain.user.service.DeleteUserService;
+import userbridge.domain.user.service.EditUserService;
+import userbridge.domain.user.service.LoginService;
+import userbridge.domain.user.service.RegistrationService;
 
 import java.util.UUID;
 
