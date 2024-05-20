@@ -1,19 +1,18 @@
-package userbridge.domain.user.service;
+package com.example.userbridge.domain.user.service;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.userbridge.domain.user.dto.UserDto;
 import org.springframework.stereotype.Service;
-import userbridge.domain.user.dto.UserDto;
-import userbridge.domain.user.entity.User;
-import userbridge.domain.user.mapper.UserDtoMapper;
-import userbridge.infrastructure.repository.UserRepository;
+import com.example.userbridge.domain.user.entity.User;
+import com.example.userbridge.domain.user.mapper.UserDtoMapper;
+import com.example.userbridge.infrastructure.repository.UserRepository;
 
 @Service
 public class RegistrationService {
     private final UserRepository userRepository;
     private final UserDtoMapper dtoMapper;
 
-    @Autowired
+
     public RegistrationService(UserRepository userRepository, UserDtoMapper dtoMapper) {
         this.userRepository = userRepository;
         this.dtoMapper = dtoMapper;

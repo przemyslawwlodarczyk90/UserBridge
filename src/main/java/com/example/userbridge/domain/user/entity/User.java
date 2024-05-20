@@ -1,4 +1,4 @@
-package userbridge.domain.user.entity;
+package com.example.userbridge.domain.user.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

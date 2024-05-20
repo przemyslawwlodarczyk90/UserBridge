@@ -1,9 +1,10 @@
-package userbridge.domain.user.service;
+package com.example.userbridge.domain.user.service;
 
 
+import com.example.userbridge.domain.user.exception.UserNotFoundException;
 import org.springframework.stereotype.Service;
-import userbridge.domain.user.entity.User;
-import userbridge.infrastructure.repository.UserRepository;
+import com.example.userbridge.domain.user.entity.User;
+import com.example.userbridge.infrastructure.repository.UserRepository;
 
 import java.util.UUID;
 
@@ -18,7 +19,7 @@ public class DeleteUserService {
 
     public void delete(UUID userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
         userRepository.delete(user);
     }
 }
