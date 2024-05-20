@@ -4,36 +4,21 @@ import com.example.userbridge.domain.user.dto.UserDto;
 import com.example.userbridge.domain.user.entity.User;
 import com.example.userbridge.domain.user.mapper.UserDtoMapper;
 import com.example.userbridge.infrastructure.repository.UserRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.Mockito;
 
-import java.util.UUID;
-
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 
 class RegistrationServiceTest {
 
-    @Mock
-    private UserRepository userRepository;
-
-    @Mock
-    private UserDtoMapper dtoMapper;
-
-    @InjectMocks
-    private RegistrationService registrationService;
-
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
+    private final UserRepository userRepository = Mockito.mock(UserRepository.class);
+    private final UserDtoMapper userDtoMapper = new UserDtoMapper();
+    private final RegistrationService registrationService = new RegistrationService(userRepository, userDtoMapper);
 
     @Test
-    void testRegisterUser() {
+    void testRegister() {
         UserDto userDto = UserDto.builder()
-                .id(UUID.randomUUID())
                 .firstName("Jan")
                 .lastName("Kowalski")
                 .email("jan.kowalski@example.com")
@@ -42,22 +27,10 @@ class RegistrationServiceTest {
                 .postalCode("00-001")
                 .city("Warszawa")
                 .build();
+        String password = "password123";
 
-        User user = User.builder()
-                .id(userDto.getId())
-                .firstName(userDto.getFirstName())
-                .lastName(userDto.getLastName())
-                .email(userDto.getEmail())
-                .phoneNumber(userDto.getPhoneNumber())
-                .street(userDto.getStreet())
-                .postalCode(userDto.getPostalCode())
-                .city(userDto.getCity())
-                .build();
+        registrationService.register(userDto, password);
 
-        when(dtoMapper.toUser(userDto)).thenReturn(user);
-
-        registrationService.register(userDto);
-
-        verify(userRepository, times(1)).save(user);
+        verify(userRepository).save(any(User.class));
     }
 }

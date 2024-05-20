@@ -8,6 +8,7 @@ import com.example.userbridge.domain.user.service.LoginService;
 import com.example.userbridge.domain.user.service.RegistrationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -15,9 +16,11 @@ import org.mockito.MockitoAnnotations;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-class UserFacadeTest {
+public class UserFacadeTest {
 
     @Mock
     private RegistrationService registrationService;
@@ -35,14 +38,13 @@ class UserFacadeTest {
     private UserFacade userFacade;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    void testRegisterUser() {
+    public void testRegisterUser() {
         UserDto userDto = UserDto.builder()
-                .id(UUID.randomUUID())
                 .firstName("Jan")
                 .lastName("Kowalski")
                 .email("jan.kowalski@example.com")
@@ -51,28 +53,38 @@ class UserFacadeTest {
                 .postalCode("00-001")
                 .city("Warszawa")
                 .build();
+        String password = "password123";
 
-        userFacade.registerUser(userDto);
+        userFacade.registerUser(userDto, password);
 
-        verify(registrationService, times(1)).register(userDto);
+        ArgumentCaptor<UserDto> userDtoCaptor = ArgumentCaptor.forClass(UserDto.class);
+        ArgumentCaptor<String> passwordCaptor = ArgumentCaptor.forClass(String.class);
+
+        verify(registrationService).register(userDtoCaptor.capture(), passwordCaptor.capture());
+
+        assertEquals(userDto, userDtoCaptor.getValue());
+        assertEquals(password, passwordCaptor.getValue());
     }
 
     @Test
-    void testLoginUser() {
+    public void testLoginUser() {
         LoginDto loginDto = new LoginDto();
         loginDto.setEmail("jan.kowalski@example.com");
         loginDto.setPassword("password123");
 
-        when(loginService.login(loginDto)).thenReturn("JWT_TOKEN");
+        when(loginService.login(any(LoginDto.class))).thenReturn("JWT_TOKEN");
 
         String token = userFacade.loginUser(loginDto);
 
+        ArgumentCaptor<LoginDto> loginDtoCaptor = ArgumentCaptor.forClass(LoginDto.class);
+        verify(loginService).login(loginDtoCaptor.capture());
+
+        assertEquals(loginDto, loginDtoCaptor.getValue());
         assertEquals("JWT_TOKEN", token);
-        verify(loginService, times(1)).login(loginDto);
     }
 
     @Test
-    void testEditUser() {
+    public void testEditUser() {
         UserDto userDto = UserDto.builder()
                 .id(UUID.randomUUID())
                 .firstName("Jan")
@@ -86,15 +98,21 @@ class UserFacadeTest {
 
         userFacade.editUser(userDto);
 
-        verify(editUserService, times(1)).edit(userDto);
+        ArgumentCaptor<UserDto> userDtoCaptor = ArgumentCaptor.forClass(UserDto.class);
+        verify(editUserService).edit(userDtoCaptor.capture());
+
+        assertEquals(userDto, userDtoCaptor.getValue());
     }
 
     @Test
-    void testDeleteUser() {
+    public void testDeleteUser() {
         UUID userId = UUID.randomUUID();
 
         userFacade.deleteUser(userId);
 
-        verify(deleteUserService, times(1)).delete(userId);
+        ArgumentCaptor<UUID> userIdCaptor = ArgumentCaptor.forClass(UUID.class);
+        verify(deleteUserService).delete(userIdCaptor.capture());
+
+        assertEquals(userId, userIdCaptor.getValue());
     }
 }

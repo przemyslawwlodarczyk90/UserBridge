@@ -8,9 +8,6 @@ import com.example.userbridge.domain.user.service.LoginService;
 import com.example.userbridge.domain.user.service.RegistrationService;
 import org.springframework.stereotype.Component;
 
-
-
-
 import java.util.UUID;
 
 @Component
@@ -28,8 +25,8 @@ public class UserFacade {
         this.deleteUserService = deleteUserService;
     }
 
-    public void registerUser(UserDto userDto) {
-        registrationService.register(userDto);
+    public void registerUser(UserDto userDto, String password) {
+        registrationService.register(userDto, password);
     }
 
     public String loginUser(LoginDto loginDto) {
