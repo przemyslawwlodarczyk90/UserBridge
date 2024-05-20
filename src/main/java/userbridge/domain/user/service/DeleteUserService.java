@@ -1,6 +1,6 @@
 package userbridge.domain.user.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 import userbridge.domain.user.entity.User;
 import userbridge.infrastructure.repository.UserRepository;
@@ -11,7 +11,7 @@ import java.util.UUID;
 public class DeleteUserService {
     private final UserRepository userRepository;
 
-    @Autowired
+
     public DeleteUserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }

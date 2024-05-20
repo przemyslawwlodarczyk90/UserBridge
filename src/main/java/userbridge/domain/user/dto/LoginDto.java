@@ -1,4 +1,4 @@
-package userbridge.domain.user.DTO;
+package userbridge.domain.user.dto;
 
 import lombok.Data;
 
