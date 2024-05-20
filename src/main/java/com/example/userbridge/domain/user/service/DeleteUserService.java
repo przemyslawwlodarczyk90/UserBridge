@@ -10,6 +10,7 @@ import java.util.UUID;
 
 @Service
 public class DeleteUserService {
+
     private final UserRepository userRepository;
 
 
