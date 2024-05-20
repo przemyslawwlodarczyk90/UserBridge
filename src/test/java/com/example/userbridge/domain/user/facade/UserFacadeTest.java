@@ -1,4 +1,4 @@
-package com.example.userbridge.infrastructure.facade;
+package com.example.userbridge.domain.user.facade;
 
 import com.example.userbridge.domain.user.dto.LoginDto;
 import com.example.userbridge.domain.user.dto.UserDto;
