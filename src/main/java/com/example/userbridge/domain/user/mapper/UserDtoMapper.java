@@ -33,17 +33,17 @@ public class UserDtoMapper {
                 .build();
     }
 
-    public User toUserWithPassword(UserDto userDto, String password) {
-        return User.builder()
-                .id(userDto.getId())
-                .firstName(userDto.getFirstName())
-                .lastName(userDto.getLastName())
-                .email(userDto.getEmail())
-                .phoneNumber(userDto.getPhoneNumber())
-                .street(userDto.getStreet())
-                .postalCode(userDto.getPostalCode())
-                .city(userDto.getCity())
-                .password(password)
-                .build();
-    }
+//    public User toUserWithPassword(UserDto userDto, String password) {
+//        return User.builder()
+//                .id(userDto.getId())
+//                .firstName(userDto.getFirstName())
+//                .lastName(userDto.getLastName())
+//                .email(userDto.getEmail())
+//                .phoneNumber(userDto.getPhoneNumber())
+//                .street(userDto.getStreet())
+//                .postalCode(userDto.getPostalCode())
+//                .city(userDto.getCity())
+//                .password(password)
+//                .build();
+//    }
 }

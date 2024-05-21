@@ -6,11 +6,11 @@ import com.example.userbridge.domain.user.service.DeleteUserService;
 import com.example.userbridge.domain.user.service.EditUserService;
 import com.example.userbridge.domain.user.service.LoginService;
 import com.example.userbridge.domain.user.service.RegistrationService;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
-@Component
+@Service
 public class UserFacade {
     private final RegistrationService registrationService;
     private final LoginService loginService;

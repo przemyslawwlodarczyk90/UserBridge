@@ -7,6 +7,7 @@ import org.hibernate.annotations.GenericGenerator;
 import java.util.UUID;
 
 @Entity
+@Table(name = "app_user")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -27,5 +28,10 @@ public class User {
     private String street;
     private String postalCode;
     private String city;
+
+    public User(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
 
 }
