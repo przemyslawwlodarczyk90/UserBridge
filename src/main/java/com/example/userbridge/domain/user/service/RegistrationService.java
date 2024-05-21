@@ -4,7 +4,6 @@ import com.example.userbridge.domain.user.dto.UserDto;
 import com.example.userbridge.domain.user.entity.User;
 import com.example.userbridge.domain.user.mapper.UserDtoMapper;
 import com.example.userbridge.infrastructure.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
