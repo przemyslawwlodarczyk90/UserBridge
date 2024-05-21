@@ -29,9 +29,6 @@ public class User {
     private String postalCode;
     private String city;
 
-    public User(String email, String password) {
-        this.email = email;
-        this.password = password;
-    }
+
 
 }
