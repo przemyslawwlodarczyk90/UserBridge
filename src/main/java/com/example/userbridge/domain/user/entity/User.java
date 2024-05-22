@@ -24,8 +24,4 @@ public class User {
     private String postalCode;
     private String city;
     private boolean enabled;
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
 }

@@ -3,7 +3,6 @@ package com.example.userbridge.domain.user.service;
 import com.example.userbridge.domain.user.dto.UserDto;
 import com.example.userbridge.domain.user.entity.User;
 import com.example.userbridge.domain.user.exception.UserNotFoundException;
-
 import com.example.userbridge.infrastructure.repository.UserRepository;
 import org.springframework.stereotype.Service;
 

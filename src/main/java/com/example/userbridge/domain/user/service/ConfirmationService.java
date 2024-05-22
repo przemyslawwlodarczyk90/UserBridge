@@ -1,6 +1,5 @@
 package com.example.userbridge.domain.user.service;
 
-
 import com.example.userbridge.domain.user.entity.ConfirmationToken;
 import com.example.userbridge.domain.user.entity.User;
 import com.example.userbridge.domain.user.exception.TokenExpiredException;
@@ -8,6 +7,7 @@ import com.example.userbridge.domain.user.exception.TokenNotFoundException;
 import com.example.userbridge.infrastructure.repository.ConfirmationTokenRepository;
 import com.example.userbridge.infrastructure.repository.UserRepository;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
 
 @Service

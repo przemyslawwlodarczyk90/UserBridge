@@ -1,12 +1,9 @@
 package com.example.userbridge.domain.user.service;
 
-
-import com.example.userbridge.domain.user.exception.UserNotFoundException;
-import org.springframework.stereotype.Service;
 import com.example.userbridge.domain.user.entity.User;
+import com.example.userbridge.domain.user.exception.UserNotFoundException;
 import com.example.userbridge.infrastructure.repository.UserRepository;
-
-import java.util.UUID;
+import org.springframework.stereotype.Service;
 
 @Service
 public class DeleteUserService {

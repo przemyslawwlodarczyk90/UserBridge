@@ -9,6 +9,7 @@ import com.example.userbridge.infrastructure.repository.UserRepository;
 import com.example.userbridge.infrastructure.service.MailService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -38,8 +39,7 @@ public class RegistrationService {
         String confirmationLink = "http://localhost:8080/api/users/confirm?token=" + token;
 
         String subject = "Confirm your registration";
-        String body = "Click the following link to confirm your registration: " + confirmationLink;
-        mailService.sendConfirmationEmail(user.getEmail(), subject, body);
+        mailService.sendConfirmationEmail(user.getEmail(), subject, user.getFirstName(), user.getLastName(), confirmationLink);
     }
 
     private String generateConfirmationToken(User user) {
