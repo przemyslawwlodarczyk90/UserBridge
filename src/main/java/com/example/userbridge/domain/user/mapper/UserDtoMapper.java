@@ -8,29 +8,28 @@ import com.example.userbridge.domain.user.entity.User;
 public class UserDtoMapper {
 
     public UserDto toUserDto(User user) {
-        return UserDto.builder()
-                .id(user.getId())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .email(user.getEmail())
-                .phoneNumber(user.getPhoneNumber())
-                .street(user.getStreet())
-                .postalCode(user.getPostalCode())
-                .city(user.getCity())
-                .build();
+        return new UserDto(
+                user.getId(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getEmail(),
+                user.getPhoneNumber(),
+                user.getStreet(),
+                user.getPostalCode(),
+                user.getCity()
+        );
     }
 
     public User toUser(UserDto userDto) {
         return User.builder()
-                .id(userDto.getId())
-                .firstName(userDto.getFirstName())
-                .lastName(userDto.getLastName())
-                .email(userDto.getEmail())
-                .phoneNumber(userDto.getPhoneNumber())
-                .street(userDto.getStreet())
-                .postalCode(userDto.getPostalCode())
-                .city(userDto.getCity())
+                .id(userDto.id())
+                .firstName(userDto.firstName())
+                .lastName(userDto.lastName())
+                .email(userDto.email())
+                .phoneNumber(userDto.phoneNumber())
+                .street(userDto.street())
+                .postalCode(userDto.postalCode())
+                .city(userDto.city())
                 .build();
     }
-
 }

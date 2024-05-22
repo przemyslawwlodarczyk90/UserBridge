@@ -4,32 +4,31 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.Builder;
-import lombok.Data;
+
 
 import java.util.UUID;
 
 @Builder
-@Data
-public class UserDto {
-    private UUID id;
+public record UserDto(
+        UUID id,
 
-    @NotBlank(message = "First name is mandatory")
-    private String firstName;
+        @NotBlank(message = "First name is mandatory")
+        String firstName,
 
-    @NotBlank(message = "Last name is mandatory")
-    private String lastName;
+        @NotBlank(message = "Last name is mandatory")
+        String lastName,
 
-    @Email(message = "Email should be valid")
-    @NotBlank(message = "Email is mandatory")
-    private String email;
+        @Email(message = "Email should be valid")
+        @NotBlank(message = "Email is mandatory")
+        String email,
 
-    @Pattern(regexp = "^\\+?[0-9. ()-]{7,25}$", message = "Phone number is invalid")
-    private String phoneNumber;
+        @Pattern(regexp = "^\\+?[0-9. ()-]{7,25}$", message = "Phone number is invalid")
+        String phoneNumber,
 
-    private String street;
+        String street,
 
-    @Pattern(regexp = "\\d{2}-\\d{3}", message = "Postal code is invalid")
-    private String postalCode;
+        @Pattern(regexp = "\\d{2}-\\d{3}", message = "Postal code is invalid")
+        String postalCode,
 
-    private String city;
-}
+        String city
+) {}

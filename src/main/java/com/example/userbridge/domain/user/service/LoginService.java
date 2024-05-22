@@ -21,9 +21,9 @@ public class LoginService {
     }
 
     public String login(LoginDto loginDto) {
-        User user = userRepository.findByEmail(loginDto.getEmail())
+        User user = userRepository.findByEmail(loginDto.email())
                 .orElseThrow(() -> new InvalidCredentialsException("Invalid email or password"));
-        if (passwordEncoder.matches(loginDto.getPassword(), user.getPassword())) {
+        if (passwordEncoder.matches(loginDto.password(), user.getPassword())) {
             return jwtService.createToken(user.getEmail());
         }
         throw new InvalidCredentialsException("Invalid email or password");

@@ -11,23 +11,20 @@ import org.springframework.stereotype.Service;
 public class EditUserService {
     private final UserRepository userRepository;
 
-
-
     public EditUserService(UserRepository userRepository) {
         this.userRepository = userRepository;
-
     }
 
     public void edit(UserDto userDto) {
-        User user = userRepository.findById(userDto.getId())
+        User user = userRepository.findById(userDto.id())
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
-        user.setFirstName(userDto.getFirstName());
-        user.setLastName(userDto.getLastName());
-        user.setEmail(userDto.getEmail());
-        user.setPhoneNumber(userDto.getPhoneNumber());
-        user.setStreet(userDto.getStreet());
-        user.setPostalCode(userDto.getPostalCode());
-        user.setCity(userDto.getCity());
+        user.setFirstName(userDto.firstName());
+        user.setLastName(userDto.lastName());
+        user.setEmail(userDto.email());
+        user.setPhoneNumber(userDto.phoneNumber());
+        user.setStreet(userDto.street());
+        user.setPostalCode(userDto.postalCode());
+        user.setCity(userDto.city());
         userRepository.save(user);
     }
 }

@@ -27,10 +27,8 @@ public class RegistrationService {
         user.setPassword(passwordEncoder.encode(password));
         userRepository.save(user);
 
-
         String token = generateConfirmationToken(user);
         String confirmationLink = "http://localhost:8080/api/users/confirm?token=" + token;
-
 
         String subject = "Confirm your registration";
         String body = "Click the following link to confirm your registration: " + confirmationLink;
@@ -38,7 +36,6 @@ public class RegistrationService {
     }
 
     private String generateConfirmationToken(User user) {
-
         return "dummy-token";
     }
 }
