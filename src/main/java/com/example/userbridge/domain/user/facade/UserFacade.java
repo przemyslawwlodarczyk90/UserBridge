@@ -36,7 +36,7 @@ public class UserFacade {
         editUserService.edit(userDto);
     }
 
-    public void deleteUser(UUID userId) {
+    public void deleteUser(Long userId) {
         deleteUserService.delete(userId);
     }
 }

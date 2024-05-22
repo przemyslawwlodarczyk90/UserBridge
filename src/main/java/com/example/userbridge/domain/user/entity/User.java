@@ -2,9 +2,6 @@ package com.example.userbridge.domain.user.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.GenericGenerator;
-
-import java.util.UUID;
 
 @Entity
 @Table(name = "app_user")
@@ -14,10 +11,9 @@ import java.util.UUID;
 @Builder
 public class User {
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
-    private UUID id;
+    private Long id;
 
     private String firstName;
     private String lastName;
@@ -27,4 +23,9 @@ public class User {
     private String street;
     private String postalCode;
     private String city;
+    private boolean enabled;
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
 }

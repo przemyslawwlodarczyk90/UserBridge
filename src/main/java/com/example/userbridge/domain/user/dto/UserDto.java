@@ -6,11 +6,9 @@ import jakarta.validation.constraints.Pattern;
 import lombok.Builder;
 
 
-import java.util.UUID;
-
 @Builder
 public record UserDto(
-        UUID id,
+        Long id,
 
         @NotBlank(message = "First name is mandatory")
         String firstName,

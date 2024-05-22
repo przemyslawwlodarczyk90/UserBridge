@@ -10,15 +10,13 @@ import java.util.UUID;
 
 @Service
 public class DeleteUserService {
-
     private final UserRepository userRepository;
-
 
     public DeleteUserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-    public void delete(UUID userId) {
+    public void delete(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
         userRepository.delete(user);
