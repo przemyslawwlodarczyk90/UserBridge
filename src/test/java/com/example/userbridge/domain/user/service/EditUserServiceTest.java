@@ -4,20 +4,20 @@ import com.example.userbridge.domain.user.dto.UserDto;
 import com.example.userbridge.domain.user.entity.User;
 import com.example.userbridge.domain.user.exception.UserNotFoundException;
 import com.example.userbridge.infrastructure.repository.UserRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.Optional;
-import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
-class EditUserServiceTest {
+ class EditUserServiceTest {
 
     @Mock
     private UserRepository userRepository;
@@ -26,69 +26,60 @@ class EditUserServiceTest {
     private EditUserService editUserService;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    void testEditUserSuccess() {
-        UUID id = UUID.randomUUID();
+     void testEditUserSuccess() {
         UserDto userDto = UserDto.builder()
-                .id(id)
-                .firstName("Anna")
-                .lastName("Nowak")
-                .email("anna.nowak@example.com")
-                .phoneNumber("987654321")
-                .street("ul. Nowogrodzka 15")
-                .postalCode("00-511")
+                .id(1L)
+                .firstName("Jan")
+                .lastName("Kowalski")
+                .email("jan.kowalski@example.com")
+                .phoneNumber("123456789")
+                .street("ul. Marszałkowska 123")
+                .postalCode("00-001")
                 .city("Warszawa")
                 .build();
 
-        User user = User.builder()
-                .id(id)
-                .firstName("Anna")
-                .lastName("Nowak")
-                .email("anna.nowak@example.com")
-                .phoneNumber("987654321")
-                .street("ul. Nowogrodzka 15")
-                .postalCode("00-511")
-                .city("Warszawa")
-                .build();
+        User user = new User();
+        user.setId(userDto.id());
 
-        when(userRepository.findById(id)).thenReturn(Optional.of(user));
+        when(userRepository.findById(userDto.id())).thenReturn(Optional.of(user));
 
         editUserService.edit(userDto);
 
-        ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
-        verify(userRepository).save(userCaptor.capture());
+        verify(userRepository).findById(userDto.id());
+        verify(userRepository).save(user);
 
-        User capturedUser = userCaptor.getValue();
-        assertEquals(userDto.getId(), capturedUser.getId());
-        assertEquals(userDto.getFirstName(), capturedUser.getFirstName());
-        assertEquals(userDto.getLastName(), capturedUser.getLastName());
-        assertEquals(userDto.getEmail(), capturedUser.getEmail());
-        assertEquals(userDto.getPhoneNumber(), capturedUser.getPhoneNumber());
-        assertEquals(userDto.getStreet(), capturedUser.getStreet());
-        assertEquals(userDto.getPostalCode(), capturedUser.getPostalCode());
-        assertEquals(userDto.getCity(), capturedUser.getCity());
+        Assertions.assertEquals(userDto.firstName(), user.getFirstName());
+        Assertions.assertEquals(userDto.lastName(), user.getLastName());
+        Assertions.assertEquals(userDto.email(), user.getEmail());
+        Assertions.assertEquals(userDto.phoneNumber(), user.getPhoneNumber());
+        Assertions.assertEquals(userDto.street(), user.getStreet());
+        Assertions.assertEquals(userDto.postalCode(), user.getPostalCode());
+        Assertions.assertEquals(userDto.city(), user.getCity());
     }
 
     @Test
-    void testEditUserNotFound() {
-        UUID id = UUID.randomUUID();
+     void testEditUserNotFound() {
         UserDto userDto = UserDto.builder()
-                .id(id)
-                .firstName("Anna")
-                .lastName("Nowak")
-                .email("anna.nowak@example.com")
-                .phoneNumber("987654321")
-                .street("ul. Nowogrodzka 15")
-                .postalCode("00-511")
+                .id(1L)
+                .firstName("Jan")
+                .lastName("Kowalski")
+                .email("jan.kowalski@example.com")
+                .phoneNumber("123456789")
+                .street("ul. Marszałkowska 123")
+                .postalCode("00-001")
                 .city("Warszawa")
                 .build();
 
-        when(userRepository.findById(id)).thenReturn(Optional.empty());
+        when(userRepository.findById(userDto.id())).thenReturn(Optional.empty());
 
         assertThrows(UserNotFoundException.class, () -> editUserService.edit(userDto));
+
+        verify(userRepository).findById(userDto.id());
+        verify(userRepository, never()).save(any(User.class));
     }
 }

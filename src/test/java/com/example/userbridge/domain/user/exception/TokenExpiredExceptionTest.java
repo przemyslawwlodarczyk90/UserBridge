@@ -5,14 +5,14 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
- class UserNotFoundExceptionTest {
+ class TokenExpiredExceptionTest {
 
     @Test
      void testExceptionMessage() {
-        String message = "User not found";
-        UserNotFoundException exception = assertThrows(
-                UserNotFoundException.class,
-                () -> { throw new UserNotFoundException(message); }
+        String message = "Token has expired";
+        TokenExpiredException exception = assertThrows(
+                TokenExpiredException.class,
+                () -> { throw new TokenExpiredException(message); }
         );
 
         assertEquals(message, exception.getMessage());
@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
     @Test
      void testExceptionInheritance() {
-        UserNotFoundException exception = new UserNotFoundException("User not found");
+        TokenExpiredException exception = new TokenExpiredException("Token has expired");
 
         assertEquals(RuntimeException.class, exception.getClass().getSuperclass());
     }

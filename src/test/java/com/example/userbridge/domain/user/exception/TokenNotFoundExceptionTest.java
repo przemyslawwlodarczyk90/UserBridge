@@ -5,14 +5,14 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
- class UserNotFoundExceptionTest {
+ class TokenNotFoundExceptionTest {
 
     @Test
      void testExceptionMessage() {
-        String message = "User not found";
-        UserNotFoundException exception = assertThrows(
-                UserNotFoundException.class,
-                () -> { throw new UserNotFoundException(message); }
+        String message = "Token not found";
+        TokenNotFoundException exception = assertThrows(
+                TokenNotFoundException.class,
+                () -> { throw new TokenNotFoundException(message); }
         );
 
         assertEquals(message, exception.getMessage());
@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
     @Test
      void testExceptionInheritance() {
-        UserNotFoundException exception = new UserNotFoundException("User not found");
+        TokenNotFoundException exception = new TokenNotFoundException("Token not found");
 
         assertEquals(RuntimeException.class, exception.getClass().getSuperclass());
     }

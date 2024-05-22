@@ -3,21 +3,18 @@ package com.example.userbridge.domain.user.service;
 import com.example.userbridge.domain.user.entity.User;
 import com.example.userbridge.domain.user.exception.UserNotFoundException;
 import com.example.userbridge.infrastructure.repository.UserRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.MockitoAnnotations;
 
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
-class DeleteUserServiceTest {
+ class DeleteUserServiceTest {
 
     @Mock
     private UserRepository userRepository;
@@ -25,9 +22,14 @@ class DeleteUserServiceTest {
     @InjectMocks
     private DeleteUserService deleteUserService;
 
+    @BeforeEach
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
     @Test
-    void shouldDeleteUserWhenUserExists() {
-        UUID userId = UUID.randomUUID();
+     void testDeleteUserSuccess() {
+        Long userId = 1L;
         User user = new User();
         user.setId(userId);
 
@@ -35,15 +37,19 @@ class DeleteUserServiceTest {
 
         deleteUserService.delete(userId);
 
+        verify(userRepository).findById(userId);
         verify(userRepository).delete(user);
     }
 
     @Test
-    void shouldThrowUserNotFoundExceptionWhenUserDoesNotExist() {
-        UUID userId = UUID.randomUUID();
+     void testDeleteUserNotFound() {
+        Long userId = 1L;
 
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
 
         assertThrows(UserNotFoundException.class, () -> deleteUserService.delete(userId));
+
+        verify(userRepository).findById(userId);
+        verify(userRepository, never()).delete(any(User.class));
     }
 }
