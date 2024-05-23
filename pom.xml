@@ -19,12 +19,15 @@
     <properties>
         <java.version>17</java.version>
         <spring-boot.version>3.2.5</spring-boot.version>
-        <lombok.version>1.18.22</lombok.version>
-        <testcontainers.version>1.19.8</testcontainers.version>
-        <assertj-core.version>3.19.0</assertj-core.version>
-        <java-jwt.version>4.0.0</java-jwt.version>
+        <lombok.version>1.18.26</lombok.version>
+        <testcontainers.version>1.19.0</testcontainers.version>
+        <assertj-core.version>3.24.2</assertj-core.version>
+        <java-jwt.version>4.2.1</java-jwt.version>
         <jjwt.version>0.12.5</jjwt.version>
         <spring-security-oauth2-authorization-server.version>1.2.4</spring-security-oauth2-authorization-server.version>
+        <mockito.version>5.3.1</mockito.version>
+        <h2.version>2.1.214</h2.version>
+        <greenmail.version>1.6.3</greenmail.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -46,6 +49,23 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <scope>runtime</scope>
             <optional>true</optional>
@@ -56,31 +76,12 @@
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-mail</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-validation</artifactId>
-        </dependency>
 
         <!-- POSTGRESQL -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <scope>runtime</scope>
-        </dependency>
-
-        <!-- THYMALEAF -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
 
         <!-- JWT -->
@@ -123,43 +124,61 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- SPRING SECURITY TEST -->
+        <!-- SPRING SECURITY -->
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
-
-        <!-- SPRING SECURITY OAUTH2 -->
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-oauth2-authorization-server</artifactId>
             <version>${spring-security-oauth2-authorization-server.version}</version>
         </dependency>
+
+        <!-- MOCKITO -->
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>4.0.0</version>
+            <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-junit-jupiter</artifactId>
-            <version>4.0.0</version>
+            <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-        </dependency>
 
+        <!-- H2 DATABASE -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
+            <version>${h2.version}</version>
             <scope>test</scope>
         </dependency>
-    </dependencies>
 
+        <!-- GREENMAIL -->
+
+        <dependency>
+            <groupId>com.icegreen</groupId>
+            <artifactId>greenmail</artifactId>
+            <version>1.6.3</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>jakarta.mail</groupId>
+            <artifactId>jakarta.mail-api</artifactId>
+            <version>2.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.mail</groupId>
+            <artifactId>jakarta.mail</artifactId>
+            <version>2.0.1</version>
+        </dependency>
+
+    </dependencies>
 
 
 

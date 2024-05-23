@@ -17,15 +17,15 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-class JwtAuthFilterTest {
+ class JwtAuthFilterTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -60,7 +60,7 @@ class JwtAuthFilterTest {
     }
 
     @Test
-     void testFilter_ValidToken() throws Exception {
+    void testFilter_ValidToken() throws Exception {
         String token = "valid-token";
 
         mockMvc.perform(get("/api/some-secured-endpoint")
@@ -70,7 +70,7 @@ class JwtAuthFilterTest {
     }
 
     @Test
-     void testFilter_InvalidToken() throws Exception {
+    void testFilter_InvalidToken() throws Exception {
         String token = "invalid-token";
 
         when(jwtService.validateToken(token)).thenReturn(false);
@@ -82,9 +82,9 @@ class JwtAuthFilterTest {
     }
 
     @Test
-     void testFilter_MissingToken() throws Exception {
+    void testFilter_MissingToken() throws Exception {
         mockMvc.perform(get("/api/some-secured-endpoint")
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isUnauthorized());
     }
 }
