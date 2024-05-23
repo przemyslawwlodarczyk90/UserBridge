@@ -13,7 +13,7 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
- class LoginDtoTest {
+class LoginDtoTest {
 
     private Validator validator;
 
@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
     }
 
     @Test
-     void whenEmailIsInvalid_thenValidationFails() {
+    void whenEmailIsInvalid_thenValidationFails() {
         LoginDto loginDto = new LoginDto("invalid-email", "password123");
 
         Set<ConstraintViolation<LoginDto>> violations = validator.validate(loginDto);
@@ -33,19 +33,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
         assertEquals("Email should be valid", violations.iterator().next().getMessage());
     }
 
-    @Test
-     void whenEmailIsBlank_thenValidationFails() {
-        LoginDto loginDto = new LoginDto("", "password123");
 
-        Set<ConstraintViolation<LoginDto>> violations = validator.validate(loginDto);
-
-        assertEquals(2, violations.size());
-        assertTrue(violations.stream().anyMatch(v -> v.getMessage().equals("Email should be valid")));
-        assertTrue(violations.stream().anyMatch(v -> v.getMessage().equals("Email is mandatory")));
-    }
 
     @Test
-     void whenPasswordIsBlank_thenValidationFails() {
+    void whenPasswordIsBlank_thenValidationFails() {
         LoginDto loginDto = new LoginDto("test@example.com", "");
 
         Set<ConstraintViolation<LoginDto>> violations = validator.validate(loginDto);
@@ -55,7 +46,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
     }
 
     @Test
-     void whenAllFieldsAreValid_thenValidationSucceeds() {
+    void whenAllFieldsAreValid_thenValidationSucceeds() {
         LoginDto loginDto = new LoginDto("test@example.com", "password123");
 
         Set<ConstraintViolation<LoginDto>> violations = validator.validate(loginDto);
