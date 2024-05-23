@@ -13,73 +13,74 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.Optional;
 
-
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
- class EditUserServiceTest {
+class EditUserServiceTest {
 
-    @Mock
-    private UserRepository userRepository;
+   @Mock
+   private UserRepository userRepository;
 
-    @InjectMocks
-    private EditUserService editUserService;
+   @InjectMocks
+   private EditUserService editUserService;
 
-    @BeforeEach
-    public void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
+   @BeforeEach
+   public void setUp() {
+      MockitoAnnotations.openMocks(this);
+   }
 
-    @Test
-     void testEditUserSuccess() {
-        UserDto userDto = UserDto.builder()
-                .id(1L)
-                .firstName("Jan")
-                .lastName("Kowalski")
-                .email("jan.kowalski@example.com")
-                .phoneNumber("123456789")
-                .street("ul. Marszałkowska 123")
-                .postalCode("00-001")
-                .city("Warszawa")
-                .build();
+   @Test
+   void testEditUserSuccess() {
+      Long userId = 1L;
+      UserDto userDto = UserDto.builder()
+              .id(userId)
+              .firstName("Jan")
+              .lastName("Kowalski")
+              .email("jan.kowalski@example.com")
+              .phoneNumber("123456789")
+              .street("ul. Marszałkowska 123")
+              .postalCode("00-001")
+              .city("Warszawa")
+              .build();
 
-        User user = new User();
-        user.setId(userDto.id());
+      User user = new User();
+      user.setId(userDto.id());
 
-        when(userRepository.findById(userDto.id())).thenReturn(Optional.of(user));
+      when(userRepository.findById(userId)).thenReturn(Optional.of(user));
 
-        editUserService.edit(userDto);
+      editUserService.edit(userId, userDto);
 
-        verify(userRepository).findById(userDto.id());
-        verify(userRepository).save(user);
+      verify(userRepository).findById(userId);
+      verify(userRepository).save(user);
 
-        Assertions.assertEquals(userDto.firstName(), user.getFirstName());
-        Assertions.assertEquals(userDto.lastName(), user.getLastName());
-        Assertions.assertEquals(userDto.email(), user.getEmail());
-        Assertions.assertEquals(userDto.phoneNumber(), user.getPhoneNumber());
-        Assertions.assertEquals(userDto.street(), user.getStreet());
-        Assertions.assertEquals(userDto.postalCode(), user.getPostalCode());
-        Assertions.assertEquals(userDto.city(), user.getCity());
-    }
+      Assertions.assertEquals(userDto.firstName(), user.getFirstName());
+      Assertions.assertEquals(userDto.lastName(), user.getLastName());
+      Assertions.assertEquals(userDto.email(), user.getEmail());
+      Assertions.assertEquals(userDto.phoneNumber(), user.getPhoneNumber());
+      Assertions.assertEquals(userDto.street(), user.getStreet());
+      Assertions.assertEquals(userDto.postalCode(), user.getPostalCode());
+      Assertions.assertEquals(userDto.city(), user.getCity());
+   }
 
-    @Test
-     void testEditUserNotFound() {
-        UserDto userDto = UserDto.builder()
-                .id(1L)
-                .firstName("Jan")
-                .lastName("Kowalski")
-                .email("jan.kowalski@example.com")
-                .phoneNumber("123456789")
-                .street("ul. Marszałkowska 123")
-                .postalCode("00-001")
-                .city("Warszawa")
-                .build();
+   @Test
+   void testEditUserNotFound() {
+      Long userId = 1L;
+      UserDto userDto = UserDto.builder()
+              .id(userId)
+              .firstName("Jan")
+              .lastName("Kowalski")
+              .email("jan.kowalski@example.com")
+              .phoneNumber("123456789")
+              .street("ul. Marszałkowska 123")
+              .postalCode("00-001")
+              .city("Warszawa")
+              .build();
 
-        when(userRepository.findById(userDto.id())).thenReturn(Optional.empty());
+      when(userRepository.findById(userId)).thenReturn(Optional.empty());
 
-        assertThrows(UserNotFoundException.class, () -> editUserService.edit(userDto));
+      assertThrows(UserNotFoundException.class, () -> editUserService.edit(userId, userDto));
 
-        verify(userRepository).findById(userDto.id());
-        verify(userRepository, never()).save(any(User.class));
-    }
+      verify(userRepository).findById(userId);
+      verify(userRepository, never()).save(any(User.class));
+   }
 }

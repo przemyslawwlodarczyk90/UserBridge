@@ -2,12 +2,8 @@ package com.example.userbridge.domain.user.facade;
 
 import com.example.userbridge.domain.user.dto.LoginDto;
 import com.example.userbridge.domain.user.dto.UserDto;
-import com.example.userbridge.domain.user.service.DeleteUserService;
-import com.example.userbridge.domain.user.service.EditUserService;
-import com.example.userbridge.domain.user.service.LoginService;
-import com.example.userbridge.domain.user.service.RegistrationService;
+import com.example.userbridge.domain.user.service.*;
 import org.springframework.stereotype.Service;
-
 
 @Service
 public class UserFacade {
@@ -32,8 +28,8 @@ public class UserFacade {
         return loginService.login(loginDto);
     }
 
-    public void editUser(UserDto userDto) {
-        editUserService.edit(userDto);
+    public void editUser(Long id, UserDto userDto) {
+        editUserService.edit(id, userDto);
     }
 
     public void deleteUser(Long userId) {

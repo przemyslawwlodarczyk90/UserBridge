@@ -10,8 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-
-
 @RestController
 @RequestMapping("/api/users")
 @Validated
@@ -40,17 +38,7 @@ public class UserController {
 
     @PutMapping("/{id}")
     public ResponseEntity<String> editUser(@PathVariable Long id, @Valid @RequestBody UserDto userDto) {
-        UserDto updatedUserDto = new UserDto(
-                id,
-                userDto.firstName(),
-                userDto.lastName(),
-                userDto.email(),
-                userDto.phoneNumber(),
-                userDto.street(),
-                userDto.postalCode(),
-                userDto.city()
-        );
-        userFacade.editUser(updatedUserDto);
+        userFacade.editUser(id, userDto);
         return ResponseEntity.ok("User updated successfully");
     }
 

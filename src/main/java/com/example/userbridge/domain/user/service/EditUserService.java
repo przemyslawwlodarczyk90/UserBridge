@@ -14,8 +14,8 @@ public class EditUserService {
         this.userRepository = userRepository;
     }
 
-    public void edit(UserDto userDto) {
-        User user = userRepository.findById(userDto.id())
+    public void edit(Long id, UserDto userDto) {
+        User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
         user.setFirstName(userDto.firstName());
         user.setLastName(userDto.lastName());
