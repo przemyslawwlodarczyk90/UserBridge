@@ -3,6 +3,8 @@ package com.example.userbridge.domain.user.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Set;
+
 @Entity
 @Table(name = "app_user")
 @Data
@@ -24,4 +26,7 @@ public class User {
     private String postalCode;
     private String city;
     private boolean enabled;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ConfirmationToken> confirmationTokens;
 }

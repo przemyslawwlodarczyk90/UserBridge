@@ -17,13 +17,14 @@ public class ConfirmationToken {
     @Column(nullable = false)
     private String token;
 
+
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
     @Column(nullable = false)
     private LocalDateTime expiresAt;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(nullable = false, name = "user_id")
     private User user;
 }

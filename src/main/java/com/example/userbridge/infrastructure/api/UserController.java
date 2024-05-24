@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserFacade userFacade;
-
     private final ConfirmationService confirmationService;
 
     public UserController(UserFacade userFacade, ConfirmationService confirmationService) {
@@ -43,9 +42,9 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userFacade.deleteUser(id);
-        return ResponseEntity.ok("User deleted successfully");
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/confirm")
