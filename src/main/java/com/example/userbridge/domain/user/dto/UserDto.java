@@ -15,10 +15,10 @@ public record UserDto(
 
         @NotBlank(message = "Last name is mandatory")
         String lastName,
-
         @Email(message = "Email should be valid")
         @NotBlank(message = "Email is mandatory")
         String email,
+
 
         @Pattern(regexp = "^\\+?[0-9. ()-]{7,25}$", message = "Phone number is invalid")
         String phoneNumber,
