@@ -33,26 +33,26 @@ class EditUserServiceTest {
 
    @Test
    void testEditUserEmailCannotBeChanged() {
-      // Given
+
       UserDto userDto = new UserDto(1L, "John", "Doe", "new.email@example.com", "123456789", "Street 1", "00-001", "City");
 
       when(userRepository.findById(1L)).thenReturn(Optional.of(existingUser));
 
-      // When & Then
+
       assertThrows(IllegalArgumentException.class, () -> editUserService.edit(1L, userDto));
    }
 
    @Test
    void testEditUser() {
-      // Given
+
       UserDto userDto = new UserDto(1L, "John", "Doe", "john.doe@example.com", "987654321", "New Street", "00-002", "New City");
 
       when(userRepository.findById(1L)).thenReturn(Optional.of(existingUser));
 
-      // When
+
       editUserService.edit(1L, userDto);
 
-      // Then
+
       verify(userRepository, times(1)).save(existingUser);
       verify(userRepository, times(1)).findById(1L);
 
