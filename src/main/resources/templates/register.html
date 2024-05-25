@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Registration</title>
+</head>
+<body>
+<h1>Register</h1>
+<form th:action="@{/users/register}" th:object="${userDto}" method="post">
+    <div>
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" th:field="*{firstName}" />
+        <div th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">First name error</div>
+    </div>
+    <div>
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" th:field="*{lastName}" />
+        <div th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Last name error</div>
+    </div>
+    <div>
+        <label for="email">Email:</label>
+        <input type="email" id="email" th:field="*{email}" />
+        <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email error</div>
+    </div>
+    <div>
+        <label for="phoneNumber">Phone Number:</label>
+        <input type="text" id="phoneNumber" th:field="*{phoneNumber}" />
+        <div th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}">Phone number error</div>
+    </div>
+    <div>
+        <label for="street">Street:</label>
+        <input type="text" id="street" th:field="*{street}" />
+    </div>
+    <div>
+        <label for="postalCode">Postal Code:</label>
+        <input type="text" id="postalCode" th:field="*{postalCode}" />
+        <div th:if="${#fields.hasErrors('postalCode')}" th:errors="*{postalCode}">Postal code error</div>
+    </div>
+    <div>
+        <label for="city">City:</label>
+        <input type="text" id="city" th:field="*{city}" />
+    </div>
+    <div>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" />
+
+    </div>
+    <div>
+        <button type="submit">Register</button>
+    </div>
+</form>
+</body>
+</html>

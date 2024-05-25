@@ -2,7 +2,11 @@ package com.example.userbridge.domain.user.facade;
 
 import com.example.userbridge.domain.user.dto.LoginDto;
 import com.example.userbridge.domain.user.dto.UserDto;
+import com.example.userbridge.domain.user.entity.User;
+import com.example.userbridge.domain.user.exception.UserNotFoundException;
+import com.example.userbridge.domain.user.mapper.UserDtoMapper;
 import com.example.userbridge.domain.user.service.*;
+import com.example.userbridge.infrastructure.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,14 +18,19 @@ public class UserFacade {
     private final EditUserService editUserService;
     private final DeleteUserService deleteUserService;
     private final UserService userService;
+    private final UserRepository userRepository;
+    private final UserDtoMapper userDtoMapper;
 
     public UserFacade(RegistrationService registrationService, LoginService loginService,
-                      EditUserService editUserService, DeleteUserService deleteUserService, UserService userService) {
+                      EditUserService editUserService, DeleteUserService deleteUserService,
+                      UserService userService, UserRepository userRepository, UserDtoMapper userDtoMapper) {
         this.registrationService = registrationService;
         this.loginService = loginService;
         this.editUserService = editUserService;
         this.deleteUserService = deleteUserService;
         this.userService = userService;
+        this.userRepository = userRepository;
+        this.userDtoMapper = userDtoMapper;
     }
 
     public void registerUser(UserDto userDto, String password) {
@@ -42,5 +51,11 @@ public class UserFacade {
 
     public List<UserDto> getAllUsers() {
         return userService.getAllUsers();
+    }
+
+    public UserDto getUserByEmail(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+        return userDtoMapper.toUserDto(user);
     }
 }

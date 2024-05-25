@@ -7,15 +7,16 @@ import com.example.userbridge.domain.user.service.ConfirmationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/users")
+@Controller
+@RequestMapping("/users")
 @Validated
 @Tag(name = "User Management", description = "APIs for managing users")
 public class UserController {
@@ -28,45 +29,90 @@ public class UserController {
         this.confirmationService = confirmationService;
     }
 
-    @Operation(summary = "Register a new user")
+    @GetMapping("/register")
+    public String showRegistrationForm(Model model) {
+        model.addAttribute("userDto", UserDto.builder().build());
+        return "register";
+    }
+
     @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@Valid @RequestBody UserRegistrationRequest request) {
-        userFacade.registerUser(request.getUserDto(), request.getPassword());
-        return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully");
+    public String registerUser(@Valid @ModelAttribute("userDto") UserDto userDto,
+                               BindingResult bindingResult, Model model,
+                               @RequestParam String password) {
+        if (bindingResult.hasErrors()) {
+            return "register";
+        }
+        userFacade.registerUser(userDto, password);
+        model.addAttribute("message", "User registered successfully. Please check your email for confirmation.");
+        return "register_success";
     }
 
-    @Operation(summary = "Login a user")
+    @GetMapping("/login")
+    public String showLoginForm(Model model) {
+        model.addAttribute("loginDto", new LoginDto("", ""));
+        return "login";
+    }
+
     @PostMapping("/login")
-    public ResponseEntity<String> loginUser(@Valid @RequestBody LoginDto loginDto) {
-        String token = userFacade.loginUser(loginDto);
-        return ResponseEntity.ok(token);
+    public String loginUser(@Valid @ModelAttribute("loginDto") LoginDto loginDto,
+                            BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            return "login";
+        }
+        try {
+            String token = userFacade.loginUser(loginDto);
+            model.addAttribute("message", "Login successful");
+            return "redirect:/users/profile"; // Replace with the actual profile page
+        } catch (Exception e) {
+            model.addAttribute("error", "Invalid credentials");
+            return "login";
+        }
     }
 
-    @Operation(summary = "Edit an existing user")
-    @PutMapping("/{id}")
-    public ResponseEntity<String> editUser(@PathVariable Long id, @Valid @RequestBody UserDto userDto) {
-        userFacade.editUser(id, userDto);
-        return ResponseEntity.ok("User updated successfully");
+    @GetMapping("/profile")
+    public String showUserProfile(Model model) {
+        // Assuming you have a method to get the currently logged in user
+        UserDto userDto = userFacade.getUserByEmail("test@example.com"); // Replace with actual email fetching logic
+        model.addAttribute("userDto", userDto);
+        return "user_details";
     }
 
-    @Operation(summary = "Delete a user")
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        userFacade.deleteUser(id);
-        return ResponseEntity.noContent().build();
+    @PostMapping("/profile")
+    public String editUser(@Valid @ModelAttribute("userDto") UserDto userDto,
+                           BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            return "user_details";
+        }
+        userFacade.editUser(userDto.id(), userDto);
+        model.addAttribute("message", "Profile updated successfully");
+        return "user_details";
     }
 
-    @Operation(summary = "Confirm a user's registration")
     @GetMapping("/confirm")
-    public ResponseEntity<String> confirmUser(@RequestParam String token) {
-        confirmationService.confirmToken(token);
-        return ResponseEntity.ok("User confirmed successfully");
+    public String confirmUser(@RequestParam String token, Model model) {
+        try {
+            confirmationService.confirmToken(token);
+            model.addAttribute("message", "User confirmed successfully");
+        } catch (Exception e) {
+            model.addAttribute("error", e.getMessage());
+        }
+        return "login";
     }
 
-    @Operation(summary = "Get a list of all users")
     @GetMapping
-    public ResponseEntity<List<UserDto>> getAllUsers() {
+    public String getAllUsers(Model model) {
         List<UserDto> users = userFacade.getAllUsers();
-        return ResponseEntity.ok(users);
+        model.addAttribute("users", users);
+        return "users";
+    }
+
+    @GetMapping("/home")
+    public String home() {
+        return "home";
+    }
+
+    @RequestMapping("*")
+    public String fallback() {
+        return "redirect:/users/home";
     }
 }
