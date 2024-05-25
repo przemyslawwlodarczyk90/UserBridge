@@ -20,6 +20,7 @@ UserBridge to aplikacja napisana w Spring Boot, która służy do zarządzania r
 - **ORM:** Hibernate
 - **Testy:** JUnit 5, Mockito
 - **Inne:** Lombok, Thymeleaf, Docker, Maven, Swagger (Springdoc OpenAPI)
+- **Dokumentacja API:** Swagger
 
 ## Wymagania
 
@@ -141,6 +142,10 @@ Aby uruchomić PostgreSQL za pomocą Dockera, użyj dostarczonego pliku docker-c
 
 
 **docker-compose up**
+
+## Swagger 
+
+Dokumentacja API jest dostępna pod adresem: **http://localhost:8080/swagger-ui.html**
 
 
 ## Wkład
