@@ -2,9 +2,7 @@ package com.example.userbridge.domain.user.service;
 
 import com.example.userbridge.domain.user.dto.UserDto;
 import com.example.userbridge.domain.user.entity.User;
-import com.example.userbridge.domain.user.exception.UserNotFoundException;
 import com.example.userbridge.infrastructure.repository.UserRepository;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -13,6 +11,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
@@ -24,63 +23,43 @@ class EditUserServiceTest {
    @InjectMocks
    private EditUserService editUserService;
 
+   private User existingUser;
+
    @BeforeEach
-   public void setUp() {
+   void setUp() {
       MockitoAnnotations.openMocks(this);
+      existingUser = new User(1L, "John", "Doe", "password", "john.doe@example.com", "123456789", "Street 1", "00-001", "City", true, null);
    }
 
    @Test
-   void testEditUserSuccess() {
-      Long userId = 1L;
-      UserDto userDto = UserDto.builder()
-              .id(userId)
-              .firstName("Jan")
-              .lastName("Kowalski")
-              .email("jan.kowalski@example.com")
-              .phoneNumber("123456789")
-              .street("ul. Marszałkowska 123")
-              .postalCode("00-001")
-              .city("Warszawa")
-              .build();
+   void testEditUserEmailCannotBeChanged() {
+      // Given
+      UserDto userDto = new UserDto(1L, "John", "Doe", "new.email@example.com", "123456789", "Street 1", "00-001", "City");
 
-      User user = new User();
-      user.setId(userDto.id());
+      when(userRepository.findById(1L)).thenReturn(Optional.of(existingUser));
 
-      when(userRepository.findById(userId)).thenReturn(Optional.of(user));
-
-      editUserService.edit(userId, userDto);
-
-      verify(userRepository).findById(userId);
-      verify(userRepository).save(user);
-
-      Assertions.assertEquals(userDto.firstName(), user.getFirstName());
-      Assertions.assertEquals(userDto.lastName(), user.getLastName());
-      Assertions.assertEquals(userDto.email(), user.getEmail());
-      Assertions.assertEquals(userDto.phoneNumber(), user.getPhoneNumber());
-      Assertions.assertEquals(userDto.street(), user.getStreet());
-      Assertions.assertEquals(userDto.postalCode(), user.getPostalCode());
-      Assertions.assertEquals(userDto.city(), user.getCity());
+      // When & Then
+      assertThrows(IllegalArgumentException.class, () -> editUserService.edit(1L, userDto));
    }
 
    @Test
-   void testEditUserNotFound() {
-      Long userId = 1L;
-      UserDto userDto = UserDto.builder()
-              .id(userId)
-              .firstName("Jan")
-              .lastName("Kowalski")
-              .email("jan.kowalski@example.com")
-              .phoneNumber("123456789")
-              .street("ul. Marszałkowska 123")
-              .postalCode("00-001")
-              .city("Warszawa")
-              .build();
+   void testEditUser() {
+      // Given
+      UserDto userDto = new UserDto(1L, "John", "Doe", "john.doe@example.com", "987654321", "New Street", "00-002", "New City");
 
-      when(userRepository.findById(userId)).thenReturn(Optional.empty());
+      when(userRepository.findById(1L)).thenReturn(Optional.of(existingUser));
 
-      assertThrows(UserNotFoundException.class, () -> editUserService.edit(userId, userDto));
+      // When
+      editUserService.edit(1L, userDto);
 
-      verify(userRepository).findById(userId);
-      verify(userRepository, never()).save(any(User.class));
+      // Then
+      verify(userRepository, times(1)).save(existingUser);
+      verify(userRepository, times(1)).findById(1L);
+
+      assertEquals("987654321", existingUser.getPhoneNumber());
+      assertEquals("New Street", existingUser.getStreet());
+      assertEquals("00-002", existingUser.getPostalCode());
+      assertEquals("New City", existingUser.getCity());
+      assertEquals("john.doe@example.com", existingUser.getEmail());
    }
 }

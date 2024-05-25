@@ -2,6 +2,7 @@ package com.example.userbridge.domain.user.service;
 
 import com.example.userbridge.domain.user.entity.User;
 import com.example.userbridge.domain.user.exception.UserNotFoundException;
+import com.example.userbridge.infrastructure.repository.ConfirmationTokenRepository;
 import com.example.userbridge.infrastructure.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,42 +15,47 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
- class DeleteUserServiceTest {
+class DeleteUserServiceTest {
 
-    @Mock
-    private UserRepository userRepository;
+   @Mock
+   private UserRepository userRepository;
 
-    @InjectMocks
-    private DeleteUserService deleteUserService;
+   @Mock
+   private ConfirmationTokenRepository confirmationTokenRepository;
 
-    @BeforeEach
-    public void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
+   @InjectMocks
+   private DeleteUserService deleteUserService;
 
-    @Test
-     void testDeleteUserSuccess() {
-        Long userId = 1L;
-        User user = new User();
-        user.setId(userId);
+   @BeforeEach
+   public void setUp() {
+      MockitoAnnotations.openMocks(this);
+   }
 
-        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+   @Test
+   void testDeleteUserSuccess() {
+      Long userId = 1L;
+      User user = new User();
+      user.setId(userId);
 
-        deleteUserService.delete(userId);
+      when(userRepository.findById(userId)).thenReturn(Optional.of(user));
 
-        verify(userRepository).findById(userId);
-        verify(userRepository).delete(user);
-    }
+      deleteUserService.delete(userId);
 
-    @Test
-     void testDeleteUserNotFound() {
-        Long userId = 1L;
+      verify(userRepository).findById(userId);
+      verify(confirmationTokenRepository).deleteByUser(user);
+      verify(userRepository).delete(user);
+   }
 
-        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+   @Test
+   void testDeleteUserNotFound() {
+      Long userId = 1L;
 
-        assertThrows(UserNotFoundException.class, () -> deleteUserService.delete(userId));
+      when(userRepository.findById(userId)).thenReturn(Optional.empty());
 
-        verify(userRepository).findById(userId);
-        verify(userRepository, never()).delete(any(User.class));
-    }
+      assertThrows(UserNotFoundException.class, () -> deleteUserService.delete(userId));
+
+      verify(userRepository).findById(userId);
+      verify(confirmationTokenRepository, never()).deleteByUser(any(User.class));
+      verify(userRepository, never()).delete(any(User.class));
+   }
 }

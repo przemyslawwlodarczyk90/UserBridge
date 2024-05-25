@@ -1,9 +1,6 @@
 package com.example.userbridge.infrastructure.api;
 
-import com.example.userbridge.domain.user.exception.InvalidCredentialsException;
-import com.example.userbridge.domain.user.exception.TokenExpiredException;
-import com.example.userbridge.domain.user.exception.TokenNotFoundException;
-import com.example.userbridge.domain.user.exception.UserNotFoundException;
+import com.example.userbridge.domain.user.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -44,4 +41,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleInvalidCredentialsException(InvalidCredentialsException ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
     }
+
+    @ExceptionHandler(UserNotActivatedException.class)
+    public ResponseEntity<String> handleUserNotActivatedException(UserNotActivatedException ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
+    }
+    @ExceptionHandler(EmailAlreadyInUseException.class)
+    public ResponseEntity<String> handleEmailAlreadyInUseException(EmailAlreadyInUseException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+    }
 }
+

@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
-public class ConfirmationTokenRepositoryTest {
+ class ConfirmationTokenRepositoryTest {
 
     @Autowired
     private ConfirmationTokenRepository confirmationTokenRepository;
@@ -24,7 +24,7 @@ public class ConfirmationTokenRepositoryTest {
     private UserRepository userRepository;
 
     @Test
-    public void testFindByToken() {
+     void testFindByToken() {
         User user = User.builder()
                 .firstName("Jan")
                 .lastName("Kowalski")
@@ -52,7 +52,7 @@ public class ConfirmationTokenRepositoryTest {
     }
 
     @Test
-    public void testFindByTokenNotFound() {
+     void testFindByTokenNotFound() {
         Optional<ConfirmationToken> foundToken = confirmationTokenRepository.findByToken("non-existent-token");
 
         assertThat(foundToken).isNotPresent();

@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-public class GlobalExceptionHandlerTest {
+ class GlobalExceptionHandlerTest {
 
    @Autowired
    private MockMvc mockMvc;
@@ -41,7 +41,7 @@ public class GlobalExceptionHandlerTest {
    private DeleteUserService deleteUserService;
 
    @Test
-   public void handleValidationExceptions() throws Exception {
+    void handleValidationExceptions() throws Exception {
       String invalidRequest = "{ \"email\": \"invalid\", \"password\": \"\" }";
 
       mockMvc.perform(post("/api/users/login")
@@ -53,7 +53,7 @@ public class GlobalExceptionHandlerTest {
    }
 
    @Test
-   public void handleTokenNotFoundException() throws Exception {
+    void handleTokenNotFoundException() throws Exception {
       Mockito.doThrow(new TokenNotFoundException("Token not found"))
               .when(confirmationService).confirmToken("invalid-token");
 
@@ -64,7 +64,7 @@ public class GlobalExceptionHandlerTest {
    }
 
    @Test
-   public void handleTokenExpiredException() throws Exception {
+    void handleTokenExpiredException() throws Exception {
       Mockito.doThrow(new TokenExpiredException("Token has expired"))
               .when(confirmationService).confirmToken("expired-token");
 
@@ -75,7 +75,7 @@ public class GlobalExceptionHandlerTest {
    }
 
    @Test
-   public void handleUserNotFoundException() throws Exception {
+    void handleUserNotFoundException() throws Exception {
       Mockito.doThrow(new UserNotFoundException("User not found"))
               .when(deleteUserService).delete(1L);
 
@@ -85,7 +85,7 @@ public class GlobalExceptionHandlerTest {
    }
 
    @Test
-   public void handleInvalidCredentialsException() throws Exception {
+    void handleInvalidCredentialsException() throws Exception {
       String invalidLogin = "{ \"email\": \"invalid@example.com\", \"password\": \"wrongpassword\" }";
 
       Mockito.doThrow(new InvalidCredentialsException("Invalid email or password"))

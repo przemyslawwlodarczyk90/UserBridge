@@ -18,11 +18,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.mockito.ArgumentMatchers.any;
 
-
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-public class UserControllerTest {
+ class UserControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -58,7 +57,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void loginUser() throws Exception {
+     void loginUser() throws Exception {
         String loginRequest = """
             {
                 "email": "jan.kowalski@example.com",
@@ -76,7 +75,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void editUser() throws Exception {
+     void editUser() throws Exception {
         String userEditRequest = """
             {
                 "firstName": "Jan",
@@ -97,14 +96,15 @@ public class UserControllerTest {
     }
 
     @Test
-    public void deleteUser() throws Exception {
+     void deleteUser() throws Exception {
         mockMvc.perform(delete("/api/users/1"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$").value("User deleted successfully"));
+                .andExpect(status().isNoContent());
+
+        Mockito.verify(userFacade).deleteUser(1L);
     }
 
     @Test
-    public void confirmUser() throws Exception {
+     void confirmUser() throws Exception {
         mockMvc.perform(get("/api/users/confirm")
                         .param("token", "fake-token"))
                 .andExpect(status().isOk())

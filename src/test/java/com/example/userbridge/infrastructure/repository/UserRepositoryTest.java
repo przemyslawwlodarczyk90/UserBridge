@@ -13,13 +13,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
-public class UserRepositoryTest {
+ class UserRepositoryTest {
 
     @Autowired
     private UserRepository userRepository;
 
     @Test
-    public void testFindByEmail() {
+     void testFindByEmail() {
         User user = User.builder()
                 .firstName("Jan")
                 .lastName("Kowalski")
@@ -39,7 +39,7 @@ public class UserRepositoryTest {
     }
 
     @Test
-    public void testFindByEmailNotFound() {
+     void testFindByEmailNotFound() {
         Optional<User> foundUser = userRepository.findByEmail("nonexistent@example.com");
 
         assertThat(foundUser).isNotPresent();

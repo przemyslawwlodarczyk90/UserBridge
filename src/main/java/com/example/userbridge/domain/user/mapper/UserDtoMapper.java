@@ -1,8 +1,8 @@
 package com.example.userbridge.domain.user.mapper;
 
 import com.example.userbridge.domain.user.dto.UserDto;
-import org.springframework.stereotype.Component;
 import com.example.userbridge.domain.user.entity.User;
+import org.springframework.stereotype.Component;
 
 @Component
 public class UserDtoMapper {

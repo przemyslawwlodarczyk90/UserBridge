@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/users")
 @Validated
@@ -51,5 +53,11 @@ public class UserController {
     public ResponseEntity<String> confirmUser(@RequestParam String token) {
         confirmationService.confirmToken(token);
         return ResponseEntity.ok("User confirmed successfully");
+    }
+
+    @GetMapping
+    public ResponseEntity<List<UserDto>> getAllUsers() {
+        List<UserDto> users = userFacade.getAllUsers();
+        return ResponseEntity.ok(users);
     }
 }

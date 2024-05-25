@@ -3,6 +3,7 @@ package com.example.userbridge.domain.user.service;
 import com.example.userbridge.domain.user.dto.UserDto;
 import com.example.userbridge.domain.user.entity.ConfirmationToken;
 import com.example.userbridge.domain.user.entity.User;
+import com.example.userbridge.domain.user.exception.EmailAlreadyInUseException;
 import com.example.userbridge.domain.user.mapper.UserDtoMapper;
 import com.example.userbridge.infrastructure.repository.ConfirmationTokenRepository;
 import com.example.userbridge.infrastructure.repository.UserRepository;
@@ -12,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
-
 @Service
 public class RegistrationService {
     private final UserRepository userRepository;
@@ -31,8 +31,15 @@ public class RegistrationService {
     }
 
     public void register(UserDto userDto, String password) {
+        // Sprawdzenie, czy istnieje aktywny użytkownik z tym adresem email
+        userRepository.findByEmailAndEnabled(userDto.email(), true)
+                .ifPresent(user -> {
+                    throw new EmailAlreadyInUseException("Email is already in use by an active user");
+                });
+
         User user = dtoMapper.toUser(userDto);
         user.setPassword(passwordEncoder.encode(password));
+        user.setEnabled(false); // Użytkownik jest nieaktywny po rejestracji
         userRepository.save(user);
 
         String token = generateConfirmationToken(user);
