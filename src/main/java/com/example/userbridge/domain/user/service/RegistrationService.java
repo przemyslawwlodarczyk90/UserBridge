@@ -31,7 +31,7 @@ public class RegistrationService {
     }
 
     public void register(UserDto userDto, String password) {
-        // Sprawdzenie, czy istnieje aktywny użytkownik z tym adresem email
+
         userRepository.findByEmailAndEnabled(userDto.email(), true)
                 .ifPresent(user -> {
                     throw new EmailAlreadyInUseException("Email is already in use by an active user");
@@ -39,7 +39,7 @@ public class RegistrationService {
 
         User user = dtoMapper.toUser(userDto);
         user.setPassword(passwordEncoder.encode(password));
-        user.setEnabled(false); // Użytkownik jest nieaktywny po rejestracji
+        user.setEnabled(false);
         userRepository.save(user);
 
         String token = generateConfirmationToken(user);
