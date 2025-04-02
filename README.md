@@ -1,161 +1,148 @@
-# UserBridge
+# 🧩 UserBridge - Most do zarządzania użytkownikami 🛡️
 
-UserBridge to aplikacja napisana w Spring Boot, która służy do zarządzania rejestracją użytkowników, logowaniem i aktualizacją profili. Aplikacja oferuje funkcje takie jak potwierdzenie rejestracji przez e-mail, uwierzytelnianie JWT oraz zarządzanie szczegółowymi informacjami o użytkownikach.
+**UserBridge** to kompletna aplikacja stworzona w Spring Boot 3.2.5, która umożliwia pełną obsługę użytkowników — od rejestracji po aktualizację profilu i autoryzację. Co więcej, aplikacja ta została zaprojektowana jako gotowy "klocek" — szablon do budowy nowych aplikacji. Można ją łatwo rozszerzać o dodatkowe funkcjonalności i wykorzystywać jako fundament większych projektów.
 
-## Funkcje
+---
 
-- **Rejestracja użytkowników:** Nowi użytkownicy mogą się rejestrować, a na ich adres e-mail wysyłane jest potwierdzenie rejestracji.
-- **Logowanie:** Użytkownicy mogą logować się za pomocą adresu e-mail i hasła.
-- **Potwierdzenie e-mail:** Na adres e-mail użytkownika wysyłany jest token potwierdzający, który musi zostać zweryfikowany, aby aktywować konto.
-- **Zarządzanie użytkownikami:** Użytkownicy mogą aktualizować swoje dane profilowe po zalogowaniu.
-- **Bezpieczeństwo:** Do zabezpieczania punktów końcowych używane są JWT, jednak zarządzanie kluczami JWT odbywa się wewnętrznie i nie jest eksponowane ani wymagane od użytkownika.
-- **Walidacja:** Obszerna walidacja danych wejściowych użytkownika, w tym format adresu e-mail, obowiązkowe pola i poprawne numery telefonów.
+## 🚀 Główne funkcje
 
-## Technologie
+- 📝 **Rejestracja** z potwierdzeniem e-mail
+- 🔐 **Logowanie** z użyciem JWT
+- ✅ **Potwierdzenie konta** przez kliknięcie linku z e-maila
+- 👤 **Edycja profilu użytkownika**
+- 🧾 **Walidacja danych wejściowych** (e-mail, telefon, wymagane pola)
+- 🔒 **Zabezpieczenia JWT** (wewnętrzne zarządzanie tokenami)
 
-- **Język programowania:** Java 17
-- **Framework:** Spring Boot 3.2.5
-- **Bezpieczeństwo:** Spring Security, JWT (JSON Web Token)
-- **Baza danych:** PostgreSQL, H2 (do testów)
-- **ORM:** Hibernate
-- **Testy:** JUnit 5, Mockito
-- **Inne:** Lombok, Thymeleaf, Docker, Maven, Swagger (Springdoc OpenAPI)
-- **Dokumentacja API:** Swagger
+---
 
-## Wymagania
+## ⚙️ Technologie
+
+- ☕ Java 17
+- 🌱 Spring Boot 3.2.5
+- 🛡 Spring Security + JWT
+- 🐘 PostgreSQL, H2 (dla testów)
+- 🔄 Hibernate (JPA)
+- 🧪 JUnit 5, Mockito
+- 📄 Swagger (Springdoc OpenAPI)
+- 🛠️ Docker
+- ❤️ Thymeleaf, Lombok, Maven
+
+---
+
+## 📚 Dokumentacja API
+
+Swagger UI dostępny pod adresem:  
+[http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+
+---
+
+## 🧪 Testowanie
+
+- ✅ Testy jednostkowe komponentów
+- 🔄 Testy integracyjne
+- 🧱 Mockowanie zależności z Mockito
+
+Aby uruchomić testy:
+
+```bash
+mvn test
+```
+
+---
+
+## 🛠️ Uruchomienie projektu
+
+### Wymagania
 
 - Java 17
-- Maven 3.8.1 lub nowszy
+- Maven 3.8.1+
 - PostgreSQL 14
-- Docker (opcjonalnie, do uruchamiania PostgreSQL w kontenerze)
+- Docker (opcjonalnie)
 
+### Krok po kroku
 
+```bash
+git clone https://github.com/yourusername/UserBridge.git
+cd UserBridge
+```
 
-## Instalacja
+Skonfiguruj `application.properties`, podając dane do bazy:
 
-1. **Sklonuj repozytorium:**
-   ```sh
-   git clone https://github.com/yourusername/UserBridge.git
-   cd UserBridge
-
-
-
-## Skonfiguruj bazę danych
-**Zaktualizuj plik** 
-
-`application.properties` **swoimi danymi dostępowymi do bazy danych PostgreSQL.**
-
-
-## **Zbuduj aplikację:**
-
-
-mvn clean install
-
-
-# **Uruchom aplikację:**
-
-
-mvn spring-boot:run
-
-## **Uzyskaj dostęp do aplikacji:**
-
-Otwórz http://localhost:8080 w swojej przeglądarce internetowej.
-
-# Konfiguracja
-
-## Konfiguracja bazy danych
-
-**Upewnij się, że zaktualizowałeś następujące właściwości w pliku application.properties:**
-
-
-
-
+```properties
 spring.datasource.url=jdbc:postgresql://localhost:5432/pgDB
 spring.datasource.username=user
 spring.datasource.password=password
+```
 
-## Konfiguracja JWT
+Zbuduj i uruchom aplikację:
 
+```bash
+mvn clean install
+mvn spring-boot:run
+```
 
-**Ustawienia JWT są skonfigurowane w pliku application.properties:**
+Otwórz w przeglądarce:  
+[http://localhost:8080](http://localhost:8080)
 
+---
 
+## 🔐 Konfiguracja JWT
 
+```properties
 auth.jwt.secret=your_secret_key
 auth.jwt.expirationDays=7
 auth.jwt.issuer=UserBridge
+```
 
-## Konfiguracja poczty
+## ✉️ Konfiguracja e-mail
 
-
-**Skonfiguruj ustawienia e-mail, aby wysyłać e-maile potwierdzające:**
-
-
-
+```properties
 spring.mail.host=smtp.gmail.com
 spring.mail.port=587
 spring.mail.username=your_email@gmail.com
 spring.mail.password=your_email_password
 spring.mail.properties.mail.smtp.auth=true
 spring.mail.properties.mail.smtp.starttls.enable=true
+```
 
-# Użytkowanie
+---
 
-## **Rejestracja użytkownika**
+## 👥 Użytkowanie (REST API)
 
-Aby zarejestrować nowego użytkownika, wyślij żądanie POST na /api/users/register z ciałem JSON:
+- Rejestracja: `POST /api/users/register`
+- Potwierdzenie konta: kliknięcie w link z e-maila
+- Logowanie: `POST /api/users/login`
+- Edycja profilu: `PUT /api/users/{id}`
+- Usuwanie konta: `DELETE /api/users/{id}`
+- Lista użytkowników: `GET /api/users`
 
+---
 
+## 🐳 Docker (PostgreSQL)
 
-## Potwierdzenie rejestracji użytkownika
+```bash
+docker-compose up
+```
 
-Po zarejestrowaniu użytkownika, na jego adres e-mail zostanie wysłany link potwierdzający. Użytkownik musi kliknąć na ten link, aby aktywować swoje konto.
+---
 
-## Logowanie
+## 🤝 Wkład
 
-Aby się zalogować, wyślij żądanie POST na /api/users/login z  ciałem JSON:
+Chcesz pomóc? Śmiało — forkuj repozytorium, otwórz pull request lub zgłoś issue!
 
+---
 
-## Edycja użytkownika
+## 📄 Licencja
 
-Aby edytować dane użytkownika, wyślij żądanie PUT na /api/users/{id} z  ciałem JSON:
+Projekt nie posiada obecnie przypisanej licencji.
 
+---
 
-## Usunięcie użytkownika
+## 🙏 Podziękowania
 
-Aby usunąć użytkownika, wyślij żądanie DELETE na /api/users/{id}.
+Dziękujemy społeczności open-source za inspirację i wszystkie narzędzia!
 
-## Pobranie listy wszystkich użytkowników
+---
 
-Aby pobrać listę wszystkich użytkowników, wyślij żądanie GET na /api/users.
-
-## Uruchamianie testów
-
-Aplikacja zawiera testy jednostkowe dla różnych komponentów. Aby uruchomić testy, użyj następującego polecenia:
-
-
-**mvn test**
-
-## Docker
-
-Aby uruchomić PostgreSQL za pomocą Dockera, użyj dostarczonego pliku docker-compose.yml:
-
-
-**docker-compose up**
-
-## Swagger 
-
-Dokumentacja API jest dostępna pod adresem: **http://localhost:8080/swagger-ui.html**
-
-
-## Wkład
-
-Jeśli chcesz przyczynić się do rozwoju aplikacji, otwieraj zgłoszenia pull request lub issues. Wkład jest mile widziany!
-
-## Licencja
-
-Ten projekt nie posiada obecnie licencji.
-
-## Podziękowania
-
-Szczególne podziękowania dla społeczności open-source za dostarczenie narzędzi i bibliotek, które umożliwiły powstanie tego projektu.
+Twój most do zarządzania użytkownikami 🧩  
+**UserBridge Dev**
