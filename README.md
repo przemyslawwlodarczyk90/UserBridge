@@ -41,6 +41,7 @@ Każda aplikacja zaczyna się tak samo: rejestracja, aktywacja konta mailem, log
 | 🛡️ | **Role i własność zasobów** | `ROLE_USER` / `ROLE_ADMIN`, `@PreAuthorize`: użytkownik edytuje i usuwa **tylko siebie** |
 | 🌐 | **CORS** | dozwolone originy konfigurowane z `.env` |
 | ⚛️ | **Frontend React** | wszystkie ekrany gotowe: logowanie, rejestracja, aktywacja, reset hasła, profil, panel admina |
+| 🇵🇱 | **Interfejs po polsku** | ekrany, komunikaty błędów i walidacji z API oraz maile w języku polskim |
 | 📦 | **Jeden port, jeden jar** | `npm run build` wrzuca frontend do Springa, a backend serwuje stronę i API razem |
 | 🔑 | **Sekrety w `.env`** | `application.properties` zawiera tylko placeholdery, więc żadne hasło nie trafia do repo |
 | 🐳 | **Baza jednym poleceniem** | Spring Boot sam uruchamia PostgreSQL z `compose.yaml` |
@@ -172,6 +173,8 @@ Vite przekazuje `/api` do backendu. Port bierze sam z `SERVER_PORT` w głównym 
   <Route path="/projects" element={<ProjectsPage />} />   {/* ← Twoja nowa funkcja */}
 </Route>
 ```
+
+Teksty są po polsku i leżą tam, gdzie się ich używa: w komponentach w `frontend/src/pages/`, w komunikatach wyjątków i adnotacjach walidacji w `domain/user/` oraz w szablonach maili w `src/main/resources/templates/`.
 
 Zalogowany użytkownik jest dostępny w każdym komponencie:
 
