@@ -66,6 +66,6 @@ class MailServiceTest {
 
         verify(mailSender).send(mimeMessageCaptor.capture());
         assertEquals("test@example.com", mimeMessageCaptor.getValue().getRecipients(MimeMessage.RecipientType.TO)[0].toString());
-        assertEquals("Reset your password", mimeMessageCaptor.getValue().getSubject());
+        assertEquals("Resetowanie hasła", mimeMessageCaptor.getValue().getSubject());
     }
 }

@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
     @Test
      void testExceptionMessage() {
-        String message = "Token not found";
+        String message = "Link aktywacyjny jest nieprawidłowy lub został już użyty";
         TokenNotFoundException exception = assertThrows(
                 TokenNotFoundException.class,
                 () -> { throw new TokenNotFoundException(message); }
@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
     @Test
      void testExceptionInheritance() {
-        TokenNotFoundException exception = new TokenNotFoundException("Token not found");
+        TokenNotFoundException exception = new TokenNotFoundException("Link aktywacyjny jest nieprawidłowy lub został już użyty");
 
         assertEquals(RuntimeException.class, exception.getClass().getSuperclass());
     }

@@ -23,12 +23,12 @@ public class LoginService {
 
     public String login(LoginDto loginDto) {
         User user = userRepository.findByEmail(loginDto.email())
-                .orElseThrow(() -> new InvalidCredentialsException("Invalid email or password"));
+                .orElseThrow(() -> new InvalidCredentialsException("Nieprawidłowy e-mail lub hasło"));
         if (!passwordEncoder.matches(loginDto.password(), user.getPassword())) {
-            throw new InvalidCredentialsException("Invalid email or password");
+            throw new InvalidCredentialsException("Nieprawidłowy e-mail lub hasło");
         }
         if (!user.isEnabled()) {
-            throw new UserNotActivatedException("Account is not activated. Check your email.");
+            throw new UserNotActivatedException("Konto nie zostało jeszcze aktywowane. Sprawdź skrzynkę e-mail.");
         }
         return jwtService.createToken(user.getEmail());
     }

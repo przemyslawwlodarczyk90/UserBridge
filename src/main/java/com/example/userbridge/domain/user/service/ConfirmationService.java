@@ -22,10 +22,10 @@ public class ConfirmationService {
 
     public void confirmToken(String token) {
         ConfirmationToken confirmationToken = tokenRepository.findByToken(token)
-                .orElseThrow(() -> new TokenNotFoundException("Token not found"));
+                .orElseThrow(() -> new TokenNotFoundException("Link aktywacyjny jest nieprawidłowy lub został już użyty"));
 
         if (confirmationToken.getExpiresAt().isBefore(LocalDateTime.now())) {
-            throw new TokenExpiredException("Token has expired");
+            throw new TokenExpiredException("Link aktywacyjny wygasł");
         }
 
         User user = confirmationToken.getUser();

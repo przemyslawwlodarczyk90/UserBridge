@@ -10,7 +10,7 @@ class EmailAlreadyInUseExceptionTest {
     @Test
     void testExceptionMessage() {
 
-        String expectedMessage = "Email is already in use by an active user";
+        String expectedMessage = "Ten adres e-mail jest już zajęty";
 
 
         EmailAlreadyInUseException exception = assertThrows(EmailAlreadyInUseException.class, () -> {

@@ -38,7 +38,7 @@ class UserDtoTest {
       Set<ConstraintViolation<UserDto>> violations = validator.validate(userDto);
 
       assertEquals(1, violations.size());
-      assertEquals("First name is mandatory", violations.iterator().next().getMessage());
+      assertEquals("Imię jest wymagane", violations.iterator().next().getMessage());
    }
 
    @Test
@@ -56,7 +56,7 @@ class UserDtoTest {
       Set<ConstraintViolation<UserDto>> violations = validator.validate(userDto);
 
       assertEquals(1, violations.size());
-      assertEquals("Last name is mandatory", violations.iterator().next().getMessage());
+      assertEquals("Nazwisko jest wymagane", violations.iterator().next().getMessage());
    }
 
    @Test
@@ -74,7 +74,7 @@ class UserDtoTest {
       Set<ConstraintViolation<UserDto>> violations = validator.validate(userDto);
 
       assertEquals(1, violations.size());
-      assertEquals("Email should be valid", violations.iterator().next().getMessage());
+      assertEquals("Podaj poprawny adres e-mail", violations.iterator().next().getMessage());
    }
 
    @Test
@@ -92,7 +92,7 @@ class UserDtoTest {
       Set<ConstraintViolation<UserDto>> violations = validator.validate(userDto);
 
       assertEquals(1, violations.size());
-      assertEquals("Phone number is invalid", violations.iterator().next().getMessage());
+      assertEquals("Nieprawidłowy numer telefonu", violations.iterator().next().getMessage());
    }
 
    @Test
@@ -110,7 +110,7 @@ class UserDtoTest {
       Set<ConstraintViolation<UserDto>> violations = validator.validate(userDto);
 
       assertEquals(1, violations.size());
-      assertEquals("Postal code is invalid", violations.iterator().next().getMessage());
+      assertEquals("Nieprawidłowy kod pocztowy (format 00-000)", violations.iterator().next().getMessage());
    }
 
    @Test

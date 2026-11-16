@@ -34,7 +34,7 @@ public class MailService {
         context.setVariable("firstName", firstName);
         context.setVariable("resetLink", resetLink);
         context.setVariable("expirationMinutes", expirationMinutes);
-        send(to, "Reset your password", "password-reset-email", context);
+        send(to, "Resetowanie hasła", "password-reset-email", context);
     }
 
     private void send(String to, String subject, String template, Context context) {

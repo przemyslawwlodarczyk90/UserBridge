@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
     @Test
      void testExceptionMessage() {
-        String message = "Invalid email or password";
+        String message = "Nieprawidłowy e-mail lub hasło";
         InvalidCredentialsException exception = assertThrows(
                 InvalidCredentialsException.class,
                 () -> { throw new InvalidCredentialsException(message); }
@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
     @Test
      void testExceptionInheritance() {
-        InvalidCredentialsException exception = new InvalidCredentialsException("Invalid email or password");
+        InvalidCredentialsException exception = new InvalidCredentialsException("Nieprawidłowy e-mail lub hasło");
 
         assertEquals(RuntimeException.class, exception.getClass().getSuperclass());
     }

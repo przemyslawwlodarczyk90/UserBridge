@@ -11,6 +11,6 @@ public class UserRegistrationRequest {
     @Valid
     private UserDto userDto;
 
-    @NotBlank(message = "Password is mandatory")
+    @NotBlank(message = "Hasło jest wymagane")
     private String password;
 }

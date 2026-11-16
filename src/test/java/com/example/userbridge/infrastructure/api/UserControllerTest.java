@@ -54,7 +54,7 @@ import static org.mockito.ArgumentMatchers.any;
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(userRegistrationRequest))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$").value("User registered successfully"));
+                .andExpect(jsonPath("$").value("Rejestracja zakończona pomyślnie"));
     }
 
     @Test
@@ -94,7 +94,7 @@ import static org.mockito.ArgumentMatchers.any;
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(userEditRequest))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").value("User updated successfully"));
+                .andExpect(jsonPath("$").value("Dane zostały zapisane"));
     }
 
     @Test
@@ -111,7 +111,7 @@ import static org.mockito.ArgumentMatchers.any;
         mockMvc.perform(get("/api/users/confirm")
                         .param("token", "fake-token"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").value("User confirmed successfully"));
+                .andExpect(jsonPath("$").value("Konto zostało aktywowane"));
     }
 
     @Test

@@ -10,22 +10,22 @@ import lombok.Builder;
 public record UserDto(
         Long id,
 
-        @NotBlank(message = "First name is mandatory")
+        @NotBlank(message = "Imię jest wymagane")
         String firstName,
 
-        @NotBlank(message = "Last name is mandatory")
+        @NotBlank(message = "Nazwisko jest wymagane")
         String lastName,
-        @Email(message = "Email should be valid")
-        @NotBlank(message = "Email is mandatory")
+        @Email(message = "Podaj poprawny adres e-mail")
+        @NotBlank(message = "Adres e-mail jest wymagany")
         String email,
 
 
-        @Pattern(regexp = "^\\+?[0-9. ()-]{7,25}$", message = "Phone number is invalid")
+        @Pattern(regexp = "^\\+?[0-9. ()-]{7,25}$", message = "Nieprawidłowy numer telefonu")
         String phoneNumber,
 
         String street,
 
-        @Pattern(regexp = "\\d{2}-\\d{3}", message = "Postal code is invalid")
+        @Pattern(regexp = "\\d{2}-\\d{3}", message = "Nieprawidłowy kod pocztowy (format 00-000)")
         String postalCode,
 
         String city

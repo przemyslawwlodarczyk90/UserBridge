@@ -49,54 +49,54 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
                       .contentType(MediaType.APPLICATION_JSON)
                       .content(invalidRequest))
               .andExpect(status().isBadRequest())
-              .andExpect(jsonPath("$.email").value("Email should be valid"))
-              .andExpect(jsonPath("$.password").value("Password is mandatory"));
+              .andExpect(jsonPath("$.email").value("Podaj poprawny adres e-mail"))
+              .andExpect(jsonPath("$.password").value("Hasło jest wymagane"));
    }
 
    @Test
     void handleTokenNotFoundException() throws Exception {
-      Mockito.doThrow(new TokenNotFoundException("Token not found"))
+      Mockito.doThrow(new TokenNotFoundException("Link aktywacyjny jest nieprawidłowy lub został już użyty"))
               .when(confirmationService).confirmToken("invalid-token");
 
       mockMvc.perform(get("/api/users/confirm")
                       .param("token", "invalid-token"))
               .andExpect(status().isNotFound())
-              .andExpect(jsonPath("$").value("Token not found"));
+              .andExpect(jsonPath("$").value("Link aktywacyjny jest nieprawidłowy lub został już użyty"));
    }
 
    @Test
     void handleTokenExpiredException() throws Exception {
-      Mockito.doThrow(new TokenExpiredException("Token has expired"))
+      Mockito.doThrow(new TokenExpiredException("Link aktywacyjny wygasł"))
               .when(confirmationService).confirmToken("expired-token");
 
       mockMvc.perform(get("/api/users/confirm")
                       .param("token", "expired-token"))
               .andExpect(status().isBadRequest())
-              .andExpect(jsonPath("$").value("Token has expired"));
+              .andExpect(jsonPath("$").value("Link aktywacyjny wygasł"));
    }
 
    @Test
    @WithMockUser(roles = "ADMIN")
     void handleUserNotFoundException() throws Exception {
-      Mockito.doThrow(new UserNotFoundException("User not found"))
+      Mockito.doThrow(new UserNotFoundException("Nie znaleziono użytkownika"))
               .when(deleteUserService).delete(1L);
 
       mockMvc.perform(delete("/api/users/1"))
               .andExpect(status().isNotFound())
-              .andExpect(jsonPath("$").value("User not found"));
+              .andExpect(jsonPath("$").value("Nie znaleziono użytkownika"));
    }
 
    @Test
     void handleInvalidCredentialsException() throws Exception {
       String invalidLogin = "{ \"email\": \"invalid@example.com\", \"password\": \"wrongpassword\" }";
 
-      Mockito.doThrow(new InvalidCredentialsException("Invalid email or password"))
+      Mockito.doThrow(new InvalidCredentialsException("Nieprawidłowy e-mail lub hasło"))
               .when(loginService).login(Mockito.any());
 
       mockMvc.perform(post("/api/users/login")
                       .contentType(MediaType.APPLICATION_JSON)
                       .content(invalidLogin))
               .andExpect(status().isUnauthorized())
-              .andExpect(jsonPath("$").value("Invalid email or password"));
+              .andExpect(jsonPath("$").value("Nieprawidłowy e-mail lub hasło"));
    }
 }

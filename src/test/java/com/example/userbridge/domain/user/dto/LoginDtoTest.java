@@ -30,7 +30,7 @@ class LoginDtoTest {
         Set<ConstraintViolation<LoginDto>> violations = validator.validate(loginDto);
 
         assertEquals(1, violations.size());
-        assertEquals("Email should be valid", violations.iterator().next().getMessage());
+        assertEquals("Podaj poprawny adres e-mail", violations.iterator().next().getMessage());
     }
 
 
@@ -42,7 +42,7 @@ class LoginDtoTest {
         Set<ConstraintViolation<LoginDto>> violations = validator.validate(loginDto);
 
         assertEquals(1, violations.size());
-        assertEquals("Password is mandatory", violations.iterator().next().getMessage());
+        assertEquals("Hasło jest wymagane", violations.iterator().next().getMessage());
     }
 
     @Test

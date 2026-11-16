@@ -44,7 +44,7 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@Valid @RequestBody UserRegistrationRequest request) {
         userFacade.registerUser(request.getUserDto(), request.getPassword());
-        return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully");
+        return ResponseEntity.status(HttpStatus.CREATED).body("Rejestracja zakończona pomyślnie");
     }
 
     @Operation(summary = "Login a user")
@@ -71,7 +71,7 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<String> editUser(@PathVariable Long id, @Valid @RequestBody UserDto userDto) {
         userFacade.editUser(id, userDto);
-        return ResponseEntity.ok("User updated successfully");
+        return ResponseEntity.ok("Dane zostały zapisane");
     }
 
     @Operation(summary = "Delete a user (owner or admin)")
@@ -86,21 +86,21 @@ public class UserController {
     @GetMapping("/confirm")
     public ResponseEntity<String> confirmUser(@RequestParam String token) {
         confirmationService.confirmToken(token);
-        return ResponseEntity.ok("User confirmed successfully");
+        return ResponseEntity.ok("Konto zostało aktywowane");
     }
 
     @Operation(summary = "Send a password reset link to the given e-mail (always returns 200)")
     @PostMapping("/password/forgot")
     public ResponseEntity<String> forgotPassword(@Valid @RequestBody ForgotPasswordDto request) {
         userFacade.requestPasswordReset(request.email());
-        return ResponseEntity.ok("If an account with this email exists, a reset link has been sent");
+        return ResponseEntity.ok("Jeśli konto z tym adresem istnieje, wysłaliśmy na nie link do resetu hasła");
     }
 
     @Operation(summary = "Set a new password using the token from the reset e-mail")
     @PostMapping("/password/reset")
     public ResponseEntity<String> resetPassword(@Valid @RequestBody ResetPasswordDto request) {
         userFacade.resetPassword(request.token(), request.newPassword());
-        return ResponseEntity.ok("Password has been changed successfully");
+        return ResponseEntity.ok("Hasło zostało zmienione");
     }
 
     @Operation(summary = "Get a list of all users (admin only)")

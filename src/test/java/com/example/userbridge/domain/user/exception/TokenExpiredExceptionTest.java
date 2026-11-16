@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
     @Test
      void testExceptionMessage() {
-        String message = "Token has expired";
+        String message = "Link aktywacyjny wygasł";
         TokenExpiredException exception = assertThrows(
                 TokenExpiredException.class,
                 () -> { throw new TokenExpiredException(message); }
@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
     @Test
      void testExceptionInheritance() {
-        TokenExpiredException exception = new TokenExpiredException("Token has expired");
+        TokenExpiredException exception = new TokenExpiredException("Link aktywacyjny wygasł");
 
         assertEquals(RuntimeException.class, exception.getClass().getSuperclass());
     }

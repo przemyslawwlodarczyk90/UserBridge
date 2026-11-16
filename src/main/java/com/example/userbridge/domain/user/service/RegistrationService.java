@@ -39,7 +39,7 @@ public class RegistrationService {
 
         userRepository.findByEmailAndEnabled(userDto.email(), true)
                 .ifPresent(user -> {
-                    throw new EmailAlreadyInUseException("Email is already in use by an active user");
+                    throw new EmailAlreadyInUseException("Ten adres e-mail jest już zajęty");
                 });
 
         User user = dtoMapper.toUser(userDto);
@@ -51,7 +51,7 @@ public class RegistrationService {
         String token = generateConfirmationToken(user);
         String confirmationLink = frontendUrl + "/confirm?token=" + token;
 
-        String subject = "Confirm your registration";
+        String subject = "Potwierdź rejestrację";
         mailService.sendConfirmationEmail(user.getEmail(), subject, user.getFirstName(), user.getLastName(), confirmationLink);
     }
 

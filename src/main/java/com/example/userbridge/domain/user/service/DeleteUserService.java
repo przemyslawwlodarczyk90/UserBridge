@@ -21,7 +21,7 @@ public class DeleteUserService {
     @Transactional
     public void delete(Long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("Nie znaleziono użytkownika"));
         confirmationTokenRepository.deleteByUser(user);
         userRepository.delete(user);
     }

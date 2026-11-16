@@ -71,7 +71,7 @@ import static org.mockito.Mockito.*;
 
         verify(userRepository).save(user);
         verify(tokenRepository).save(any(ConfirmationToken.class));
-        verify(mailService).sendConfirmationEmail(eq(user.getEmail()), eq("Confirm your registration"), eq(user.getFirstName()), eq(user.getLastName()), anyString());
+        verify(mailService).sendConfirmationEmail(eq(user.getEmail()), eq("Potwierdź rejestrację"), eq(user.getFirstName()), eq(user.getLastName()), anyString());
 
         assertEquals("encodedPassword", user.getPassword());
     }

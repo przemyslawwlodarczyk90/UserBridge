@@ -17,15 +17,15 @@ public class EditUserService {
 
     public void edit(Long id, UserDto userDto) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("Nie znaleziono użytkownika"));
 
         if (!user.isEnabled()) {
-            throw new UserNotActivatedException("User is not activated");
+            throw new UserNotActivatedException("Konto nie jest aktywne");
         }
 
 
         if (!userDto.email().equals(user.getEmail())) {
-            throw new IllegalArgumentException("Email cannot be changed");
+            throw new IllegalArgumentException("Nie można zmienić adresu e-mail");
         }
 
         user.setFirstName(userDto.firstName());

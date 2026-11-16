@@ -67,11 +67,11 @@ public class PasswordResetService {
     @Transactional
     public void resetPassword(String token, String newPassword) {
         PasswordResetToken resetToken = tokenRepository.findByToken(token)
-                .orElseThrow(() -> new TokenNotFoundException("Reset link is invalid or has already been used"));
+                .orElseThrow(() -> new TokenNotFoundException("Link do resetu hasła jest nieprawidłowy lub został już użyty"));
 
         if (resetToken.isExpired()) {
             tokenRepository.delete(resetToken);
-            throw new TokenExpiredException("Reset link has expired");
+            throw new TokenExpiredException("Link do resetu hasła wygasł. Poproś o nowy.");
         }
 
         User user = resetToken.getUser();

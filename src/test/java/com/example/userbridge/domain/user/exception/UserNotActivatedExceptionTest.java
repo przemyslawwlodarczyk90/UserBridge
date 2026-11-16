@@ -10,7 +10,7 @@ class UserNotActivatedExceptionTest {
     @Test
     void testExceptionMessage() {
 
-        String expectedMessage = "User is not activated";
+        String expectedMessage = "Konto nie jest aktywne";
 
 
         UserNotActivatedException exception = assertThrows(UserNotActivatedException.class, () -> {
