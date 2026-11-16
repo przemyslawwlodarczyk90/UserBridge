@@ -35,8 +35,8 @@ class UserServiceTest {
     @Test
     void testGetAllUsers() {
 
-        User user1 = new User(1L, "John", "Doe", "password", "john.doe@example.com", "123456789", "Street 1", "00-001", "City", true, null);
-        User user2 = new User(2L, "Jane", "Doe", "password", "jane.doe@example.com", "987654321", "Street 2", "00-002", "City", true, null);
+        User user1 = new User(1L, "John", "Doe", "password", "john.doe@example.com", "123456789", "Street 1", "00-001", "City", true, new java.util.HashSet<>(), null);
+        User user2 = new User(2L, "Jane", "Doe", "password", "jane.doe@example.com", "987654321", "Street 2", "00-002", "City", true, new java.util.HashSet<>(), null);
         when(userRepository.findAll()).thenReturn(Arrays.asList(user1, user2));
 
         UserDto userDto1 = new UserDto(1L, "John", "Doe", "john.doe@example.com", "123456789", "Street 1", "00-001", "City");

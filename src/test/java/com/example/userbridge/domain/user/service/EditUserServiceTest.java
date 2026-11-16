@@ -28,7 +28,7 @@ class EditUserServiceTest {
    @BeforeEach
    void setUp() {
       MockitoAnnotations.openMocks(this);
-      existingUser = new User(1L, "John", "Doe", "password", "john.doe@example.com", "123456789", "Street 1", "00-001", "City", true, null);
+      existingUser = new User(1L, "John", "Doe", "password", "john.doe@example.com", "123456789", "Street 1", "00-001", "City", true, new java.util.HashSet<>(), null);
    }
 
    @Test
