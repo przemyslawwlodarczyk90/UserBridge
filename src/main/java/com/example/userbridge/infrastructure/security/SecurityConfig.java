@@ -29,9 +29,8 @@ import java.util.List;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    /** Endpoints available without a JWT. */
+    /** API endpoints available without a JWT. */
     private static final String[] PUBLIC_ENDPOINTS = {
-            "/",
             "/api/users/register",
             "/api/users/login",
             "/api/users/confirm",
@@ -61,7 +60,10 @@ public class SecurityConfig {
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/users").hasRole("ADMIN")
                         .requestMatchers("/api/user/**").hasAnyRole("USER", "ADMIN")
-                        .anyRequest().authenticated()
+                        // every other API endpoint requires a valid JWT
+                        .requestMatchers("/api/**").authenticated()
+                        // the rest is the React app (index.html, JS, CSS) - always public
+                        .anyRequest().permitAll()
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
