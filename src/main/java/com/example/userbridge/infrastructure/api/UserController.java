@@ -1,6 +1,8 @@
 package com.example.userbridge.infrastructure.api;
 
+import com.example.userbridge.domain.user.dto.ForgotPasswordDto;
 import com.example.userbridge.domain.user.dto.LoginDto;
+import com.example.userbridge.domain.user.dto.ResetPasswordDto;
 import com.example.userbridge.domain.user.dto.UserDto;
 import com.example.userbridge.domain.user.facade.UserFacade;
 import com.example.userbridge.domain.user.service.ConfirmationService;
@@ -61,6 +63,20 @@ public class UserController {
     public ResponseEntity<String> confirmUser(@RequestParam String token) {
         confirmationService.confirmToken(token);
         return ResponseEntity.ok("User confirmed successfully");
+    }
+
+    @Operation(summary = "Send a password reset link to the given e-mail (always returns 200)")
+    @PostMapping("/password/forgot")
+    public ResponseEntity<String> forgotPassword(@Valid @RequestBody ForgotPasswordDto request) {
+        userFacade.requestPasswordReset(request.email());
+        return ResponseEntity.ok("If an account with this email exists, a reset link has been sent");
+    }
+
+    @Operation(summary = "Set a new password using the token from the reset e-mail")
+    @PostMapping("/password/reset")
+    public ResponseEntity<String> resetPassword(@Valid @RequestBody ResetPasswordDto request) {
+        userFacade.resetPassword(request.token(), request.newPassword());
+        return ResponseEntity.ok("Password has been changed successfully");
     }
 
     @Operation(summary = "Get a list of all users")

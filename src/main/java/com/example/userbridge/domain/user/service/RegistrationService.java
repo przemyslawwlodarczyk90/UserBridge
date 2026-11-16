@@ -9,6 +9,7 @@ import com.example.userbridge.domain.user.mapper.UserDtoMapper;
 import com.example.userbridge.infrastructure.repository.ConfirmationTokenRepository;
 import com.example.userbridge.infrastructure.repository.UserRepository;
 import com.example.userbridge.infrastructure.service.MailService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,9 @@ public class RegistrationService {
     private final UserDtoMapper dtoMapper;
     private final PasswordEncoder passwordEncoder;
     private final MailService mailService;
+
+    @Value("${app.frontend-url}")
+    private String frontendUrl;
 
     public RegistrationService(UserRepository userRepository, ConfirmationTokenRepository tokenRepository,
                                UserDtoMapper dtoMapper, PasswordEncoder passwordEncoder, MailService mailService) {
@@ -45,7 +49,7 @@ public class RegistrationService {
         userRepository.save(user);
 
         String token = generateConfirmationToken(user);
-        String confirmationLink = "http://localhost:8080/api/users/confirm?token=" + token;
+        String confirmationLink = frontendUrl + "/confirm?token=" + token;
 
         String subject = "Confirm your registration";
         mailService.sendConfirmationEmail(user.getEmail(), subject, user.getFirstName(), user.getLastName(), confirmationLink);

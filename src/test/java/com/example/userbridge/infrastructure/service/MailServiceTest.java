@@ -13,6 +13,7 @@ import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 class MailServiceTest {
@@ -54,4 +55,17 @@ class MailServiceTest {
     }
 
 
+
+    @Test
+    void testSendPasswordResetEmail() throws Exception {
+        MimeMessage mimeMessage = new MimeMessage((jakarta.mail.Session) null);
+        when(mailSender.createMimeMessage()).thenReturn(mimeMessage);
+        when(templateEngine.process(eq("password-reset-email"), any(Context.class))).thenReturn("<html>reset</html>");
+
+        mailService.sendPasswordResetEmail("test@example.com", "Jan", "http://localhost:5173/reset-password?token=x", 30);
+
+        verify(mailSender).send(mimeMessageCaptor.capture());
+        assertEquals("test@example.com", mimeMessageCaptor.getValue().getRecipients(MimeMessage.RecipientType.TO)[0].toString());
+        assertEquals("Reset your password", mimeMessageCaptor.getValue().getSubject());
+    }
 }

@@ -14,14 +14,17 @@ public class UserFacade {
     private final EditUserService editUserService;
     private final DeleteUserService deleteUserService;
     private final UserService userService;
+    private final PasswordResetService passwordResetService;
 
     public UserFacade(RegistrationService registrationService, LoginService loginService,
-                      EditUserService editUserService, DeleteUserService deleteUserService, UserService userService) {
+                      EditUserService editUserService, DeleteUserService deleteUserService, UserService userService,
+                      PasswordResetService passwordResetService) {
         this.registrationService = registrationService;
         this.loginService = loginService;
         this.editUserService = editUserService;
         this.deleteUserService = deleteUserService;
         this.userService = userService;
+        this.passwordResetService = passwordResetService;
     }
 
     public void registerUser(UserDto userDto, String password) {
@@ -42,5 +45,13 @@ public class UserFacade {
 
     public List<UserDto> getAllUsers() {
         return userService.getAllUsers();
+    }
+
+    public void requestPasswordReset(String email) {
+        passwordResetService.requestReset(email);
+    }
+
+    public void resetPassword(String token, String newPassword) {
+        passwordResetService.resetPassword(token, newPassword);
     }
 }

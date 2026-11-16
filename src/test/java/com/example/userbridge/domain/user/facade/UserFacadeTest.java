@@ -31,6 +31,9 @@ class UserFacadeTest {
    @Mock
    private UserService userService;
 
+   @Mock
+   private PasswordResetService passwordResetService;
+
    @InjectMocks
    private UserFacade userFacade;
 
@@ -137,5 +140,17 @@ class UserFacadeTest {
       assertEquals(userDto2, actualUsers.get(1));
 
       verify(userService, times(1)).getAllUsers();
+   }
+
+   @Test
+   void testRequestPasswordReset() {
+      userFacade.requestPasswordReset("jan@example.com");
+      verify(passwordResetService).requestReset("jan@example.com");
+   }
+
+   @Test
+   void testResetPassword() {
+      userFacade.resetPassword("token", "newPassword1");
+      verify(passwordResetService).resetPassword("token", "newPassword1");
    }
 }

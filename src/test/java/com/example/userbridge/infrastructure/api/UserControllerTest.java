@@ -110,4 +110,40 @@ import static org.mockito.ArgumentMatchers.any;
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").value("User confirmed successfully"));
     }
+
+    @Test
+    void forgotPassword() throws Exception {
+        mockMvc.perform(post("/api/users/password/forgot")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"email\": \"jan.kowalski@example.com\"}"))
+                .andExpect(status().isOk());
+
+        Mockito.verify(userFacade).requestPasswordReset("jan.kowalski@example.com");
+    }
+
+    @Test
+    void forgotPassword_invalidEmail_returnsBadRequest() throws Exception {
+        mockMvc.perform(post("/api/users/password/forgot")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"email\": \"not-an-email\"}"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void resetPassword() throws Exception {
+        mockMvc.perform(post("/api/users/password/reset")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"token\": \"abc\", \"newPassword\": \"newPassword1\"}"))
+                .andExpect(status().isOk());
+
+        Mockito.verify(userFacade).resetPassword("abc", "newPassword1");
+    }
+
+    @Test
+    void resetPassword_tooShortPassword_returnsBadRequest() throws Exception {
+        mockMvc.perform(post("/api/users/password/reset")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"token\": \"abc\", \"newPassword\": \"short\"}"))
+                .andExpect(status().isBadRequest());
+    }
 }

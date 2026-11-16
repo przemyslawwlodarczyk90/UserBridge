@@ -22,17 +22,26 @@ public class MailService {
     }
 
     public void sendConfirmationEmail(String to, String subject, String firstName, String lastName, String confirmationLink) {
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message);
-
         Context context = new Context();
         context.setVariable("firstName", firstName);
         context.setVariable("lastName", lastName);
         context.setVariable("confirmationLink", confirmationLink);
+        send(to, subject, "registration-email", context);
+    }
 
-        String htmlContent = templateEngine.process("registration-email", context);
+    public void sendPasswordResetEmail(String to, String firstName, String resetLink, long expirationMinutes) {
+        Context context = new Context();
+        context.setVariable("firstName", firstName);
+        context.setVariable("resetLink", resetLink);
+        context.setVariable("expirationMinutes", expirationMinutes);
+        send(to, "Reset your password", "password-reset-email", context);
+    }
 
+    private void send(String to, String subject, String template, Context context) {
+        String htmlContent = templateEngine.process(template, context);
+        MimeMessage message = mailSender.createMimeMessage();
         try {
+            MimeMessageHelper helper = new MimeMessageHelper(message, "UTF-8");
             helper.setTo(to);
             helper.setSubject(subject);
             helper.setText(htmlContent, true);
