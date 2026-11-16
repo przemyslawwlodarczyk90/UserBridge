@@ -31,6 +31,7 @@ public class SecurityConfig {
 
     /** Endpoints available without a JWT. */
     private static final String[] PUBLIC_ENDPOINTS = {
+            "/",
             "/api/users/register",
             "/api/users/login",
             "/api/users/confirm",
