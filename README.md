@@ -13,7 +13,7 @@
 ![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)
 ![Vite](https://img.shields.io/badge/Vite-5-646CFF?logo=vite&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white)
-![Tests](https://img.shields.io/badge/tests-76%20passing-brightgreen)
+![Tests](https://img.shields.io/badge/tests-81%20passing-brightgreen)
 
 </div>
 
@@ -41,10 +41,11 @@ Każda aplikacja zaczyna się tak samo: rejestracja, aktywacja konta mailem, log
 | 🛡️ | **Role i własność zasobów** | `ROLE_USER` / `ROLE_ADMIN`, `@PreAuthorize`: użytkownik edytuje i usuwa **tylko siebie** |
 | 🌐 | **CORS** | dozwolone originy konfigurowane z `.env` |
 | ⚛️ | **Frontend React** | wszystkie ekrany gotowe: logowanie, rejestracja, aktywacja, reset hasła, profil, panel admina |
+| 📦 | **Jeden port, jeden jar** | `npm run build` wrzuca frontend do Springa, a backend serwuje stronę i API razem |
 | 🔑 | **Sekrety w `.env`** | `application.properties` zawiera tylko placeholdery, więc żadne hasło nie trafia do repo |
 | 🐳 | **Baza jednym poleceniem** | Spring Boot sam uruchamia PostgreSQL z `compose.yaml` |
 | 📄 | **Swagger UI** | dokumentacja API pod `/swagger-ui.html` |
-| 🧪 | **76 testów** | JUnit 5, Mockito, MockMvc, Spring Security Test, H2 |
+| 🧪 | **81 testów** | JUnit 5, Mockito, MockMvc, Spring Security Test, H2 |
 
 ---
 
@@ -52,12 +53,12 @@ Każda aplikacja zaczyna się tak samo: rejestracja, aktywacja konta mailem, log
 
 ```mermaid
 flowchart LR
-    subgraph Frontend["⚛️ React (Vite) :5173"]
+    subgraph Frontend["⚛️ React · serwowany przez Spring z /static"]
         UI[Pages] --> Ctx[AuthContext<br/>useAuth]
         Ctx --> Api[api/client.js<br/>fetch + JWT]
     end
 
-    subgraph Backend["🌱 Spring Boot :8080"]
+    subgraph Backend["🌱 Spring Boot :8080 (strona + API)"]
         F[JwtAuthFilter] --> C[UserController]
         C --> Fa[UserFacade]
         Fa --> S[Services<br/>Registration · Login · Confirmation<br/>PasswordReset · Edit · Delete]
@@ -65,7 +66,7 @@ flowchart LR
         S --> M[MailService<br/>Thymeleaf]
     end
 
-    Api -- "/api/** (proxy w dev)" --> F
+    Api -- "/api/** (ten sam origin)" --> F
     R --> DB[(PostgreSQL)]
     M --> SMTP[[SMTP / Gmail]]
 ```
@@ -95,25 +96,66 @@ sequenceDiagram
 
 ## 🚀 Start w 3 krokach
 
-**Wymagania:** Java 17+, Node 18+, Docker
+**Wymagania:** Java 17+ (działa też na 21 i 25), Node 18+, Docker
 
 ```bash
 # 1. Konfiguracja: skopiuj szablon i uzupełnij sekrety (JWT, SMTP)
 cp .env.example .env
 
-# 2. Backend: PostgreSQL wstaje automatycznie z compose.yaml
-./mvnw spring-boot:run
+# 2. Zbuduj frontend: trafia od razu do src/main/resources/static
+cd frontend && npm install && npm run build && cd ..
 
-# 3. Frontend
-cd frontend && npm install && npm run dev
+# 3. Uruchom backend: PostgreSQL wstaje automatycznie z compose.yaml
+./mvnw spring-boot:run
 ```
 
-Otwórz **http://localhost:5173** i zarejestruj konto. Link aktywacyjny przyjdzie mailem.
+Otwórz **http://localhost:8080** (albo port z `SERVER_PORT`) i zarejestruj konto. Link aktywacyjny przyjdzie mailem.
 
 | Adres | Co tam jest |
 |---|---|
-| http://localhost:5173 | aplikacja React |
+| http://localhost:8080 | aplikacja React |
+| http://localhost:8080/api/... | REST API |
 | http://localhost:8080/swagger-ui.html | dokumentacja API |
+
+---
+
+## 📦 Jeden port: frontend wbudowany w Spring Boot
+
+Domyślnie **całość działa pod portem backendu**. Nie potrzebujesz osobnego serwera dla frontendu, nie konfigurujesz CORS, a wdrażasz **jeden plik `.jar`**.
+
+```mermaid
+flowchart LR
+    B["npm run build<br/>(frontend/)"] -->|"outDir"| S["src/main/resources/static/"]
+    S --> J["./mvnw package<br/>→ UserBridge.jar"]
+    J --> P["http://localhost:8080<br/>strona + /api + swagger"]
+```
+
+**Jak to działa:**
+
+- `frontend/vite.config.js`: `build.outDir` wskazuje na `src/main/resources/static`. Folder jest czyszczony przy każdym buildzie, więc nie zbierają się stare pliki.
+- `SpaWebConfig`: Spring serwuje pliki z `/static`. Adresy obsługiwane przez React Router (`/login`, `/profile`, `/reset-password?token=…`) po wejściu z linku w mailu albo po odświeżeniu strony dostają `index.html`, a resztą zajmuje się React. Ścieżki `/api/**` i brakujące pliki (`*.js`, `*.css`) zwracają normalne 404.
+- `SecurityConfig`: JWT jest wymagany tylko dla `/api/**`. Pliki strony są publiczne.
+- Frontend woła API pod względnym adresem (`/api/...`), więc działa na każdym porcie i domenie bez zmian.
+- Linki w mailach domyślnie prowadzą na `http://localhost:${SERVER_PORT}`.
+- Wynik builda jest w `.gitignore`, bo to artefakt i nie powinien trafiać do repo.
+
+**Wdrożenie produkcyjne:**
+
+```bash
+cd frontend && npm run build && cd ..
+./mvnw clean package
+java -jar target/UserBridge-0.0.1-SNAPSHOT.jar
+```
+
+### Tryb deweloperski z hot reload (opcjonalnie)
+
+Gdy intensywnie pracujesz nad UI, uruchom Vite obok backendu:
+
+```bash
+cd frontend && npm run dev      # http://localhost:5173
+```
+
+Vite przekazuje `/api` do backendu. Port bierze sam z `SERVER_PORT` w głównym `.env`, więc niczego nie musisz ustawiać dwa razy. Jeśli chcesz, żeby linki z maili też otwierały się na 5173, ustaw w `.env` `APP_FRONTEND_URL=http://localhost:5173`. Kiedy skończysz, `npm run build` i znowu wszystko jest pod jednym portem.
 
 ---
 
@@ -162,14 +204,14 @@ Wszystkie wartości zależne od środowiska są w jednym pliku `.env`, z któreg
 | Zmienna | Opis |
 |---|---|
 | `SERVER_PORT` | port backendu (domyślnie 8080) |
-| `APP_FRONTEND_URL` | adres frontendu, używany w linkach w mailach |
-| `APP_CORS_ALLOWED_ORIGINS` | originy dopuszczone przez CORS (po przecinku) |
+| `APP_FRONTEND_URL` | adres w linkach z maili, domyślnie `http://localhost:${SERVER_PORT}` |
+| `APP_CORS_ALLOWED_ORIGINS` | originy dopuszczone przez CORS (po przecinku), potrzebne tylko gdy frontend działa na innym adresie |
 | `JWT_SECRET`, `JWT_EXPIRATION_DAYS` | klucz podpisu i ważność tokenu |
 | `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USERNAME`, `DB_PASSWORD` | PostgreSQL |
 | `MAIL_USERNAME`, `MAIL_PASSWORD` | SMTP (dla Gmaila: [hasło aplikacji](https://myaccount.google.com/apppasswords)) |
 | `PASSWORD_RESET_EXPIRATION_MINUTES` | ważność linku resetu hasła |
 
-Frontend ma własny `frontend/.env` (`VITE_API_URL`, `VITE_API_PROXY_TARGET`, `VITE_APP_NAME`). W trybie dev Vite przekazuje `/api` do backendu, więc lokalnie nie trzeba konfigurować CORS.
+Frontend ma własny `frontend/.env`: `VITE_APP_NAME` to nazwa aplikacji w nawigacji, a `VITE_API_URL` zostaw puste, jeśli frontend i API są pod tym samym adresem. Ustawiasz je tylko wtedy, gdy hostujesz frontend osobno.
 
 ---
 
@@ -191,7 +233,7 @@ Frontend ma własny `frontend/.env` (`VITE_API_URL`, `VITE_API_PROXY_TARGET`, `V
 ./mvnw test
 ```
 
-**76 testów** jednostkowych i integracyjnych: serwisy domenowe (Mockito), kontrolery i obsługa błędów (MockMvc + Spring Security Test), repozytoria (H2), wysyłka maili i JWT. Testy nie potrzebują `.env` ani Dockera, więc działają od razu w CI.
+**81 testów** jednostkowych i integracyjnych: serwisy domenowe (Mockito), kontrolery i obsługa błędów (MockMvc + Spring Security Test), repozytoria (H2), wysyłka maili, JWT oraz serwowanie SPA (fallback na `index.html`). Testy nie potrzebują `.env` ani Dockera, więc działają od razu w CI.
 
 ---
 
@@ -204,18 +246,28 @@ UserBridge/
 │   └── infrastructure/
 │       ├── api/                # REST controllers + GlobalExceptionHandler
 │       ├── security/           # SecurityConfig, JwtAuthFilter, JwtService, UserAccess
+│       ├── web/                # SpaWebConfig: serwowanie Reacta + fallback routingu
 │       ├── repository/         # Spring Data JPA
 │       └── service/            # MailService
-├── src/main/resources/templates/  # maile HTML (aktywacja, reset hasła)
+├── src/main/resources/
+│   ├── templates/              # maile HTML (aktywacja, reset hasła)
+│   └── static/                 # ← tu ląduje `npm run build` (gitignored)
 ├── frontend/
 │   └── src/
 │       ├── api/                # client.js (fetch + JWT + błędy), userApi.js
 │       ├── auth/               # AuthContext (useAuth), ProtectedRoute
 │       ├── components/         # Layout, FormField, Alert, AuthCard, Spinner
 │       └── pages/              # Login, Register, Confirm, Forgot/ResetPassword, Dashboard, Profile, Admin
+├── docs/                       # nagranie z testami API w Postmanie
 ├── compose.yaml                # PostgreSQL dla dev
 └── .env.example                # szablon konfiguracji
 ```
+
+---
+
+## 🎬 Demo
+
+Nagranie z testami API w Postmanie: [`docs/UserBridge-Postman-tests.mp4`](docs/UserBridge-Postman-tests.mp4)
 
 ---
 
@@ -224,7 +276,8 @@ UserBridge/
 - [ ] Refresh tokeny i wylogowanie po stronie serwera
 - [ ] Logowanie przez Google / GitHub (OAuth2)
 - [ ] Migracje bazy (Flyway) zamiast `ddl-auto`
-- [ ] Dockerfile dla backendu i frontendu + pipeline CI
+- [ ] Build frontendu w Mavenie (`frontend-maven-plugin`): jeden `./mvnw package` zamiast dwóch kroków
+- [ ] Dockerfile + pipeline CI
 - [ ] Zarządzanie rolami z panelu admina
 
 ---
