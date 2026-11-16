@@ -14,14 +14,14 @@ export default function AdminUsersPage() {
 
   return (
     <div className="card">
-      <h2>All users</h2>
+      <h2>Wszyscy użytkownicy</h2>
       <Alert type="error">{error}</Alert>
       {!users && !error && <Spinner />}
       {users && (
         <div className="table-wrap">
           <table>
             <thead>
-              <tr><th>ID</th><th>Name</th><th>Email</th><th>Phone</th><th>City</th></tr>
+              <tr><th>ID</th><th>Imię i nazwisko</th><th>E-mail</th><th>Telefon</th><th>Miasto</th></tr>
             </thead>
             <tbody>
               {users.map((u) => (

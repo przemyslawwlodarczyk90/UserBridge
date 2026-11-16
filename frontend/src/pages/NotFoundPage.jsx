@@ -4,8 +4,8 @@ export default function NotFoundPage() {
   return (
     <div className="card center">
       <h1>404</h1>
-      <p className="muted">This page does not exist.</p>
-      <Link to="/" className="btn btn-primary">Go home</Link>
+      <p className="muted">Taka strona nie istnieje.</p>
+      <Link to="/" className="btn btn-primary">Wróć na stronę główną</Link>
     </div>
   );
 }

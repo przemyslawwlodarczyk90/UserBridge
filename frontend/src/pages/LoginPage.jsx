@@ -34,22 +34,22 @@ export default function LoginPage() {
 
   return (
     <AuthCard
-      title="Welcome back"
-      subtitle="Log in to your account"
-      footer={<>No account yet? <Link to="/register">Create one</Link></>}
+      title="Witaj ponownie"
+      subtitle="Zaloguj się na swoje konto"
+      footer={<>Nie masz konta? <Link to="/register">Zarejestruj się</Link></>}
     >
       <Alert type="success">{location.state?.message}</Alert>
       <Alert type="error">{error}</Alert>
       <form onSubmit={onSubmit} noValidate>
-        <FormField label="Email" name="email" type="email" autoComplete="email" required
+        <FormField label="E-mail" name="email" type="email" autoComplete="email" required
                    value={form.email} onChange={onChange} />
-        <FormField label="Password" name="password" type="password" autoComplete="current-password" required
+        <FormField label="Hasło" name="password" type="password" autoComplete="current-password" required
                    value={form.password} onChange={onChange} />
         <div className="form-links">
-          <Link to="/forgot-password">Forgot password?</Link>
+          <Link to="/forgot-password">Nie pamiętasz hasła?</Link>
         </div>
         <button className="btn btn-primary btn-block" disabled={submitting}>
-          {submitting ? 'Logging in…' : 'Log in'}
+          {submitting ? 'Logowanie…' : 'Zaloguj się'}
         </button>
       </form>
     </AuthCard>

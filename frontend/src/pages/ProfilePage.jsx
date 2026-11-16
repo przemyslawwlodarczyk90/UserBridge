@@ -36,7 +36,7 @@ export default function ProfilePage() {
       await userApi.update(user.id, emptyToNull({ id: user.id, ...form }));
       const me = await refreshUser();
       setForm(toForm(me.user));
-      setMessage({ type: 'success', text: 'Profile saved.' });
+      setMessage({ type: 'success', text: 'Zmiany zostały zapisane.' });
     } catch (err) {
       if (err.fieldErrors) setFieldErrors(err.fieldErrors);
       setMessage({ type: 'error', text: err.message });
@@ -46,12 +46,12 @@ export default function ProfilePage() {
   };
 
   const onDelete = async () => {
-    if (!window.confirm('Delete your account permanently? This cannot be undone.')) return;
+    if (!window.confirm('Na pewno usunąć konto? Tej operacji nie można cofnąć.')) return;
     setDeleting(true);
     try {
       await userApi.remove(user.id);
       logout();
-      navigate('/login', { replace: true, state: { message: 'Your account has been deleted.' } });
+      navigate('/login', { replace: true, state: { message: 'Twoje konto zostało usunięte.' } });
     } catch (err) {
       setMessage({ type: 'error', text: err.message });
       setDeleting(false);
@@ -61,31 +61,31 @@ export default function ProfilePage() {
   return (
     <div className="stack">
       <div className="card">
-        <h2>Your profile</h2>
+        <h2>Twój profil</h2>
         <Alert type={message.type}>{message.text}</Alert>
         <form onSubmit={onSave} noValidate>
           <div className="row">
-            <FormField label="First name" name="firstName" required
+            <FormField label="Imię" name="firstName" required
                        value={form.firstName} onChange={onChange} error={fieldErrors.firstName} />
-            <FormField label="Last name" name="lastName" required
+            <FormField label="Nazwisko" name="lastName" required
                        value={form.lastName} onChange={onChange} error={fieldErrors.lastName} />
           </div>
-          <FormField label="Email" name="email" type="email" value={form.email} disabled
-                     hint="Email cannot be changed" />
+          <FormField label="E-mail" name="email" type="email" value={form.email} disabled
+                     hint="Adresu e-mail nie można zmienić" />
           <div className="row">
             {optionalFields.map((f) => (
               <FormField key={f.name} {...f} value={form[f.name]} onChange={onChange} error={fieldErrors[f.name]} />
             ))}
           </div>
-          <button className="btn btn-primary" disabled={saving}>{saving ? 'Saving…' : 'Save changes'}</button>
+          <button className="btn btn-primary" disabled={saving}>{saving ? 'Zapisywanie…' : 'Zapisz zmiany'}</button>
         </form>
       </div>
 
       <div className="card danger-zone">
-        <h2>Danger zone</h2>
-        <p className="muted">Deleting your account removes all your data. This action is irreversible.</p>
+        <h2>Strefa niebezpieczna</h2>
+        <p className="muted">Usunięcie konta trwale kasuje wszystkie Twoje dane. Tej operacji nie można cofnąć.</p>
         <button className="btn btn-danger" onClick={onDelete} disabled={deleting}>
-          {deleting ? 'Deleting…' : 'Delete account'}
+          {deleting ? 'Usuwanie…' : 'Usuń konto'}
         </button>
       </div>
     </div>

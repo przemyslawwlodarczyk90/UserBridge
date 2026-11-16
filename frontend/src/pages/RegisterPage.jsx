@@ -25,11 +25,11 @@ export default function RegisterPage() {
     setError('');
     setFieldErrors({});
     if (form.password.length < 8) {
-      setFieldErrors({ password: 'Password must be at least 8 characters' });
+      setFieldErrors({ password: 'Hasło musi mieć co najmniej 8 znaków' });
       return;
     }
     if (form.password !== form.confirmPassword) {
-      setFieldErrors({ confirmPassword: 'Passwords do not match' });
+      setFieldErrors({ confirmPassword: 'Hasła nie są takie same' });
       return;
     }
     setSubmitting(true);
@@ -52,9 +52,9 @@ export default function RegisterPage() {
 
   if (done) {
     return (
-      <AuthCard title="Check your inbox 📬" footer={<Link to="/login">Back to log in</Link>}>
+      <AuthCard title="Sprawdź skrzynkę 📬" footer={<Link to="/login">Wróć do logowania</Link>}>
         <Alert type="success">
-          We sent an activation link to <strong>{form.email}</strong>. Click it to activate your account.
+          Wysłaliśmy link aktywacyjny na adres <strong>{form.email}</strong>. Kliknij go, aby aktywować konto.
         </Alert>
       </AuthCard>
     );
@@ -62,35 +62,35 @@ export default function RegisterPage() {
 
   return (
     <AuthCard
-      title="Create an account"
-      subtitle="It takes less than a minute"
-      footer={<>Already registered? <Link to="/login">Log in</Link></>}
+      title="Załóż konto"
+      subtitle="To zajmie mniej niż minutę"
+      footer={<>Masz już konto? <Link to="/login">Zaloguj się</Link></>}
     >
       <Alert type="error">{error}</Alert>
       <form onSubmit={onSubmit} noValidate>
         <div className="row">
-          <FormField label="First name" name="firstName" required autoComplete="given-name"
+          <FormField label="Imię" name="firstName" required autoComplete="given-name"
                      value={form.firstName} onChange={onChange} error={fieldErrors.firstName} />
-          <FormField label="Last name" name="lastName" required autoComplete="family-name"
+          <FormField label="Nazwisko" name="lastName" required autoComplete="family-name"
                      value={form.lastName} onChange={onChange} error={fieldErrors.lastName} />
         </div>
-        <FormField label="Email" name="email" type="email" required autoComplete="email"
+        <FormField label="E-mail" name="email" type="email" required autoComplete="email"
                    value={form.email} onChange={onChange} error={fieldErrors.email} />
         <div className="row">
-          <FormField label="Password" name="password" type="password" required autoComplete="new-password"
-                     hint="At least 8 characters"
+          <FormField label="Hasło" name="password" type="password" required autoComplete="new-password"
+                     hint="Co najmniej 8 znaków"
                      value={form.password} onChange={onChange} error={fieldErrors.password} />
-          <FormField label="Repeat password" name="confirmPassword" type="password" required autoComplete="new-password"
+          <FormField label="Powtórz hasło" name="confirmPassword" type="password" required autoComplete="new-password"
                      value={form.confirmPassword} onChange={onChange} error={fieldErrors.confirmPassword} />
         </div>
         <details>
-          <summary className="muted" style={{ cursor: 'pointer', marginBottom: '1rem' }}>Optional details</summary>
+          <summary className="muted" style={{ cursor: 'pointer', marginBottom: '1rem' }}>Dane dodatkowe (opcjonalnie)</summary>
           {optionalFields.map((f) => (
             <FormField key={f.name} {...f} value={form[f.name]} onChange={onChange} error={fieldErrors[f.name]} />
           ))}
         </details>
         <button className="btn btn-primary btn-block" disabled={submitting}>
-          {submitting ? 'Creating account…' : 'Sign up'}
+          {submitting ? 'Zakładanie konta…' : 'Załóż konto'}
         </button>
       </form>
     </AuthCard>

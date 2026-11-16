@@ -27,22 +27,22 @@ export default function ForgotPasswordPage() {
 
   return (
     <AuthCard
-      title="Forgot your password?"
-      subtitle="Enter your email and we will send you a link to set a new one."
-      footer={<Link to="/login">Back to log in</Link>}
+      title="Nie pamiętasz hasła?"
+      subtitle="Podaj swój e-mail, a wyślemy Ci link do ustawienia nowego hasła."
+      footer={<Link to="/login">Wróć do logowania</Link>}
     >
       {sent ? (
         <Alert type="success">
-          If an account exists for <strong>{email}</strong>, a reset link is on its way. Check your inbox (and spam).
+          Jeśli istnieje konto dla <strong>{email}</strong>, link do resetu hasła jest już w drodze. Sprawdź skrzynkę (także folder spam).
         </Alert>
       ) : (
         <>
           <Alert type="error">{error}</Alert>
           <form onSubmit={onSubmit} noValidate>
-            <FormField label="Email" name="email" type="email" autoComplete="email" required
+            <FormField label="E-mail" name="email" type="email" autoComplete="email" required
                        value={email} onChange={(e) => setEmail(e.target.value)} />
             <button className="btn btn-primary btn-block" disabled={submitting || !email}>
-              {submitting ? 'Sending…' : 'Send reset link'}
+              {submitting ? 'Wysyłanie…' : 'Wyślij link'}
             </button>
           </form>
         </>

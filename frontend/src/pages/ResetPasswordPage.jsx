@@ -22,17 +22,17 @@ export default function ResetPasswordPage() {
     setError('');
     setFieldErrors({});
     if (form.password.length < 8) {
-      setFieldErrors({ password: 'Password must be at least 8 characters' });
+      setFieldErrors({ password: 'Hasło musi mieć co najmniej 8 znaków' });
       return;
     }
     if (form.password !== form.confirm) {
-      setFieldErrors({ confirm: 'Passwords do not match' });
+      setFieldErrors({ confirm: 'Hasła nie są takie same' });
       return;
     }
     setSubmitting(true);
     try {
       await userApi.resetPassword(token, form.password);
-      navigate('/login', { replace: true, state: { message: 'Password changed. Log in with your new password.' } });
+      navigate('/login', { replace: true, state: { message: 'Hasło zostało zmienione. Zaloguj się nowym hasłem.' } });
     } catch (err) {
       setError(err.message);
     } finally {
@@ -42,26 +42,26 @@ export default function ResetPasswordPage() {
 
   if (!token) {
     return (
-      <AuthCard title="Invalid link" footer={<Link to="/forgot-password">Request a new link</Link>}>
-        <Alert type="error">This reset link is missing a token.</Alert>
+      <AuthCard title="Nieprawidłowy link" footer={<Link to="/forgot-password">Poproś o nowy link</Link>}>
+        <Alert type="error">Ten link jest niekompletny (brak tokenu).</Alert>
       </AuthCard>
     );
   }
 
   return (
     <AuthCard
-      title="Set a new password"
-      footer={<Link to="/forgot-password">Need a new link?</Link>}
+      title="Ustaw nowe hasło"
+      footer={<Link to="/forgot-password">Potrzebujesz nowego linku?</Link>}
     >
       <Alert type="error">{error}</Alert>
       <form onSubmit={onSubmit} noValidate>
-        <FormField label="New password" name="password" type="password" autoComplete="new-password" required
-                   hint="At least 8 characters"
+        <FormField label="Nowe hasło" name="password" type="password" autoComplete="new-password" required
+                   hint="Co najmniej 8 znaków"
                    value={form.password} onChange={onChange} error={fieldErrors.password} />
-        <FormField label="Repeat new password" name="confirm" type="password" autoComplete="new-password" required
+        <FormField label="Powtórz nowe hasło" name="confirm" type="password" autoComplete="new-password" required
                    value={form.confirm} onChange={onChange} error={fieldErrors.confirm} />
         <button className="btn btn-primary btn-block" disabled={submitting}>
-          {submitting ? 'Saving…' : 'Change password'}
+          {submitting ? 'Zapisywanie…' : 'Zmień hasło'}
         </button>
       </form>
     </AuthCard>

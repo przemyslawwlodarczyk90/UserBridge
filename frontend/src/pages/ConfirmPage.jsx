@@ -16,17 +16,17 @@ export default function ConfirmPage() {
     if (sent.current) return;
     sent.current = true;
     if (!token) {
-      setState({ status: 'error', message: 'Activation link is missing a token.' });
+      setState({ status: 'error', message: 'Link aktywacyjny jest niekompletny (brak tokenu).' });
       return;
     }
     userApi
       .confirm(token)
-      .then(() => setState({ status: 'success', message: 'Your account is active. You can log in now.' }))
+      .then(() => setState({ status: 'success', message: 'Konto jest aktywne. Możesz się teraz zalogować.' }))
       .catch((err) => setState({ status: 'error', message: err.message }));
   }, [token]);
 
   return (
-    <AuthCard title="Account activation" footer={<Link to="/login">Go to log in</Link>}>
+    <AuthCard title="Aktywacja konta" footer={<Link to="/login">Przejdź do logowania</Link>}>
       {state.status === 'loading' ? <Spinner /> : <Alert type={state.status}>{state.message}</Alert>}
     </AuthCard>
   );

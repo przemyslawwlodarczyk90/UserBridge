@@ -44,22 +44,28 @@ async function parseBody(response) {
   return text;
 }
 
+const FALLBACK_MESSAGES = {
+  400: 'Nieprawidłowe dane.',
+  401: 'Nie jesteś zalogowany lub sesja wygasła.',
+  403: 'Nie masz uprawnień do tej operacji.',
+  404: 'Nie znaleziono zasobu.',
+  500: 'Wystąpił błąd serwera. Spróbuj ponownie później.',
+};
+const fallbackMessage = (status) => FALLBACK_MESSAGES[status] || `Żądanie nie powiodło się (${status})`;
+
 function toApiError(status, body) {
   if (body && typeof body === 'object') {
-    // Spring default error body: { status, error, message, path }
-    if (body.message || body.error) {
-      return new ApiError(status, body.message || body.error);
+    // Spring's default error body ({ timestamp, status, error, path }) carries only
+    // generic English text such as "Unauthorized" - show a friendly message instead.
+    if ('path' in body && 'status' in body) {
+      return new ApiError(status, fallbackMessage(status));
     }
     // Validation errors from GlobalExceptionHandler: { field: message }
     const messages = Object.values(body);
-    return new ApiError(status, messages[0] || 'Validation failed', body);
+    return new ApiError(status, messages[0] || 'Popraw błędy w formularzu', body);
   }
-  const fallback = {
-    401: 'You are not logged in or your session has expired.',
-    403: 'You do not have permission to do this.',
-    404: 'Resource not found.',
-  };
-  return new ApiError(status, body || fallback[status] || `Request failed (${status})`);
+  // Plain-text messages from the API are already user-facing (in Polish)
+  return new ApiError(status, body || fallbackMessage(status));
 }
 
 export async function request(path, { method = 'GET', body, auth = true } = {}) {
@@ -77,7 +83,7 @@ export async function request(path, { method = 'GET', body, auth = true } = {}) 
       body: body !== undefined ? JSON.stringify(body) : undefined,
     });
   } catch {
-    throw new ApiError(0, 'Cannot reach the server. Is the backend running?');
+    throw new ApiError(0, 'Brak połączenia z serwerem. Czy backend jest uruchomiony?');
   }
 
   const data = await parseBody(response);

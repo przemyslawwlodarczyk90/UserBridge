@@ -22,16 +22,16 @@ export default function Layout() {
         <nav>
           {isAuthenticated ? (
             <>
-              <NavLink to="/" end>Dashboard</NavLink>
-              <NavLink to="/profile">Profile</NavLink>
-              {isAdmin && <NavLink to="/admin/users">Users</NavLink>}
+              <NavLink to="/" end>Pulpit</NavLink>
+              <NavLink to="/profile">Profil</NavLink>
+              {isAdmin && <NavLink to="/admin/users">Użytkownicy</NavLink>}
               <span className="nav-user">{user?.firstName}</span>
-              <button className="btn btn-ghost" onClick={handleLogout}>Log out</button>
+              <button className="btn btn-ghost" onClick={handleLogout}>Wyloguj</button>
             </>
           ) : (
             <>
-              <NavLink to="/login">Log in</NavLink>
-              <NavLink to="/register" className="btn btn-primary btn-sm">Sign up</NavLink>
+              <NavLink to="/login">Zaloguj się</NavLink>
+              <NavLink to="/register" className="btn btn-primary btn-sm">Załóż konto</NavLink>
             </>
           )}
         </nav>
@@ -39,7 +39,7 @@ export default function Layout() {
       <main className="container">
         <Outlet />
       </main>
-      <footer className="footer muted">Built on UserBridge &middot; Spring Boot + React starter</footer>
+      <footer className="footer muted">Zbudowane na UserBridge &middot; starter Spring Boot + React</footer>
     </div>
   );
 }
