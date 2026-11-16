@@ -8,8 +8,6 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.Date;
 
 @Component
@@ -26,7 +24,7 @@ public class JwtService {
 
     public String createToken(String email) {
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
-        Instant now = LocalDateTime.now().toInstant(ZoneOffset.UTC);
+        Instant now = Instant.now();
         Instant expiresAt = now.plusSeconds(expirationDays * 24 * 60 * 60);
 
         return JWT.create()
