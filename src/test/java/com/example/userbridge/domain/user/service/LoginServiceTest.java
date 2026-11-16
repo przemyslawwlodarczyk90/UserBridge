@@ -43,6 +43,7 @@ import static org.mockito.Mockito.*;
         User user = new User();
         user.setEmail(loginDto.email());
         user.setPassword("encodedPassword");
+        user.setEnabled(true);
 
         when(userRepository.findByEmail(loginDto.email())).thenReturn(Optional.of(user));
         when(passwordEncoder.matches(loginDto.password(), user.getPassword())).thenReturn(true);
@@ -83,6 +84,22 @@ import static org.mockito.Mockito.*;
 
         verify(userRepository).findByEmail(loginDto.email());
         verify(passwordEncoder).matches(loginDto.password(), user.getPassword());
+        verify(jwtService, never()).createToken(anyString());
+    }
+
+    @Test
+    void testLoginNotActivatedAccount() {
+        LoginDto loginDto = new LoginDto("jan.kowalski@example.com", "password123");
+        User user = new User();
+        user.setEmail(loginDto.email());
+        user.setPassword("encodedPassword");
+        user.setEnabled(false);
+
+        when(userRepository.findByEmail(loginDto.email())).thenReturn(Optional.of(user));
+        when(passwordEncoder.matches(loginDto.password(), user.getPassword())).thenReturn(true);
+
+        assertThrows(com.example.userbridge.domain.user.exception.UserNotActivatedException.class,
+                () -> loginService.login(loginDto));
         verify(jwtService, never()).createToken(anyString());
     }
 }

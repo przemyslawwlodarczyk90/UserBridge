@@ -3,6 +3,7 @@ package com.example.userbridge.domain.user.service;
 import com.example.userbridge.domain.user.dto.UserDto;
 import com.example.userbridge.domain.user.entity.ConfirmationToken;
 import com.example.userbridge.domain.user.entity.User;
+import com.example.userbridge.domain.user.enums.RoleEntity;
 import com.example.userbridge.domain.user.exception.EmailAlreadyInUseException;
 import com.example.userbridge.domain.user.mapper.UserDtoMapper;
 import com.example.userbridge.infrastructure.repository.ConfirmationTokenRepository;
@@ -40,6 +41,7 @@ public class RegistrationService {
         User user = dtoMapper.toUser(userDto);
         user.setPassword(passwordEncoder.encode(password));
         user.setEnabled(false);
+        user.getRoles().add(RoleEntity.ROLE_USER);
         userRepository.save(user);
 
         String token = generateConfirmationToken(user);

@@ -3,6 +3,7 @@ package com.example.userbridge.domain.user.service;
 import com.example.userbridge.domain.user.dto.LoginDto;
 import com.example.userbridge.domain.user.entity.User;
 import com.example.userbridge.domain.user.exception.InvalidCredentialsException;
+import com.example.userbridge.domain.user.exception.UserNotActivatedException;
 import com.example.userbridge.infrastructure.repository.UserRepository;
 import com.example.userbridge.infrastructure.security.JwtService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,9 +24,12 @@ public class LoginService {
     public String login(LoginDto loginDto) {
         User user = userRepository.findByEmail(loginDto.email())
                 .orElseThrow(() -> new InvalidCredentialsException("Invalid email or password"));
-        if (passwordEncoder.matches(loginDto.password(), user.getPassword())) {
-            return jwtService.createToken(user.getEmail());
+        if (!passwordEncoder.matches(loginDto.password(), user.getPassword())) {
+            throw new InvalidCredentialsException("Invalid email or password");
         }
-        throw new InvalidCredentialsException("Invalid email or password");
+        if (!user.isEnabled()) {
+            throw new UserNotActivatedException("Account is not activated. Check your email.");
+        }
+        return jwtService.createToken(user.getEmail());
     }
 }
