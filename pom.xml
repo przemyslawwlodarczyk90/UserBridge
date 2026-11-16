@@ -24,13 +24,14 @@
         <spring-boot.version>3.2.5</spring-boot.version>
 
         <!-- Dependency Versions -->
-        <lombok.version>1.18.26</lombok.version>
+        <lombok.version>1.18.42</lombok.version>
         <testcontainers.version>1.19.0</testcontainers.version>
         <assertj-core.version>3.24.2</assertj-core.version>
         <java-jwt.version>4.2.1</java-jwt.version>
         <jjwt.version>0.12.5</jjwt.version>
         <spring-security-oauth2-authorization-server.version>1.2.4</spring-security-oauth2-authorization-server.version>
-        <mockito.version>5.3.1</mockito.version>
+        <mockito.version>5.20.0</mockito.version>
+        <byte-buddy.version>1.17.7</byte-buddy.version>
         <h2.version>2.1.214</h2.version>
         <greenmail.version>1.6.3</greenmail.version>
 
@@ -214,7 +215,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>3.13.0</version>
                 <configuration>
                     <annotationProcessorPaths>
                         <path>
