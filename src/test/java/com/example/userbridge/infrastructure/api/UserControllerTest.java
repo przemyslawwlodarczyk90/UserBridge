@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -75,6 +76,7 @@ import static org.mockito.ArgumentMatchers.any;
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
      void editUser() throws Exception {
         String userEditRequest = """
             {
@@ -96,6 +98,7 @@ import static org.mockito.ArgumentMatchers.any;
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
      void deleteUser() throws Exception {
         mockMvc.perform(delete("/api/users/1"))
                 .andExpect(status().isNoContent());
@@ -145,5 +148,21 @@ import static org.mockito.ArgumentMatchers.any;
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"token\": \"abc\", \"newPassword\": \"short\"}"))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void me_returnsCurrentUserWithRoles() throws Exception {
+        com.example.userbridge.domain.user.entity.User user = com.example.userbridge.domain.user.entity.User.builder()
+                .id(7L).firstName("Jan").lastName("Kowalski").email("jan@example.com").enabled(true)
+                .roles(new java.util.HashSet<>(java.util.Set.of(com.example.userbridge.domain.user.enums.RoleEntity.ROLE_USER)))
+                .build();
+
+        mockMvc.perform(get("/api/users/me")
+                        .with(org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors
+                                .user(new com.example.userbridge.infrastructure.security.UserDetailsImpl(user))))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.user.id").value(7))
+                .andExpect(jsonPath("$.user.email").value("jan@example.com"))
+                .andExpect(jsonPath("$.roles[0]").value("ROLE_USER"));
     }
 }
